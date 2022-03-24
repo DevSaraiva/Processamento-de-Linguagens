@@ -1,6 +1,8 @@
 from ast import Return
 import ply.lex as lex
 import sys
+import os
+import re
 
 
 # "LIST_SIZE",
@@ -72,8 +74,14 @@ lexer = lex.lex()
 
 # state
 # verificar se é necessário
+filename = os.path.basename("./alunos.csv")
+
+filenameFormatted = re.sub(r'(\w+).csv', r'\1', filename)
+
+final_Filename = filenameFormatted + ".json"
+
 lexer.headers = []
-lexer.jsonFile = open("alunos.json", "w", encoding="utf-8")
+lexer.jsonFile = open(final_Filename, "w", encoding="utf-8")
 lexer.index = 0
 
 lexer.begin("header")
