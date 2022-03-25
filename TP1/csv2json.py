@@ -76,31 +76,25 @@ def t_header_AGREGATION(t):
 
     
 
-    columnName = lexer.headers.pop(lexer.index)
 
 
-    if agreg_func == 'sum':
+    if (agreg_func == 'sum') or (agreg_func == 'media') or (agreg_func == 'max'):
         for i in range(lexer.maxSize):
             lexer.agregation.pop(lexer.index)
-            lexer.agregation.append("sum")
-            lexer.headers.append(columnName + "_" + "sum")
+            lexer.agregation.append(agreg_func)
+            columnName = lexer.headers.pop(lexer.index)
+            lexer.headers.append(columnName + "_" + agreg_func)
         print(lexer.agregation)
         lexer.maxSize = 0                   # reset the max size variable after filling the agregation array
 
-    elif agreg_func == 'media':
-        for j in range(lexer.maxSize):
-            lexer.agregation.pop(lexer.index)
-            lexer.agregation.append("media")
-            lexer.headers.append(columnName + "_" + "media")
-        lexer.maxSize = 0                   # reset the max size variable after filling the agregation array
+    # elif agreg_func == 'media':
+    #     for j in range(lexer.maxSize):
+    #         lexer.agregation.pop(lexer.index)
+    #         lexer.agregation.append("media")
+    #         columnName = lexer.headers.pop(lexer.index)
+    #         lexer.headers.append(columnName + "_" + "media")
+    #     lexer.maxSize = 0                   # reset the max size variable after filling the agregation array
         
-
-
-
-
-
-
-
 
 
 
@@ -301,8 +295,8 @@ for line in sys.stdin:
 
 lexer.jsonFile.write('\n]')
 
-# print("headers:" + lexer.headers)
-# print("agregation:" + lexer.agregation)
-# print("context:" + lexer.context)
+print(lexer.headers)
+print(lexer.agregation)
+print(lexer.context)
 
 print(lexer.opList)
