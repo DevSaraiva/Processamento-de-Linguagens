@@ -27,7 +27,6 @@ def t_header_LISTSIZE(t):
         maxSize = minSize
 
     lexer.maxSize = maxSize
-    # lexer.sizesList[lexer.index] = (minSize, maxSize)
     lexer.context.pop(lexer.index)
     lexer.context.append("inicioLista")
     for i in range(maxSize-2):          # menos 2 é o inicioLista e fimLista
@@ -38,8 +37,7 @@ def t_header_LISTSIZE(t):
 
     for j in range(maxSize-1):
         lexer.headers.append(lexer.headers[lexer.index])
-        lexer.agregation.append("no_Agregation")            #TODO: no caso de apanhar a funcao agregation temos que dar popp destes no_Agregation todos 
-    return t
+        lexer.agregation.append("no_Agregation")            
 
 
 def t_header_SEPARATOR(t):
@@ -224,23 +222,6 @@ def t_DATA(t):
 
 def t_NEWLINE(t):
     r'\n'
-
-    # if(lexer.context[lexer.index] == "fimLista" and lexer.agregation[lexer.index] != "no_Agregation"):
-    #     opValue = 0
-    #     for i in range(len(lexer.opList)):
-    #         if (lexer.agregation[lexer.index] == "sum"):
-    #             opValue += int(lexer.opList[i])
-    #         elif lexer.agregation[lexer.index] == "media":
-    #             opValue += int(lexer.opList[i])
-        
-    #     #caso a operação pretendida seja a media, temos que dividir pelo nº total de elementos
-    #     if lexer.agregation[lexer.index] == "media":
-    #         opValue = opValue/len(lexer.opList)
-
-    #     lexer.jsonFile.write(
-    #             '\t\t"' + lexer.headers[lexer.index-4] + '" : "' + str(opValue) + '",\n')
-
-
     lexer.index = 0
     t.lexer.begin("INITIAL")
     lexer.jsonFile.write(',\n\t{\n')
