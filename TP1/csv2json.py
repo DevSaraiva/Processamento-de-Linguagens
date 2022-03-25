@@ -267,9 +267,11 @@ lexer = lex.lex()
 
 # state
 # verificar se é necessário
-filename = os.path.basename("./alunos.csv")
+filename = sys.argv[1]
+csvFile = open(filename, 'r')
 filenameFormatted = re.sub(r'(\w+).csv', r'\1', filename)
 final_Filename = filenameFormatted + ".json"
+
 
 lexer.context = []
 lexer.sizesList = []
@@ -287,7 +289,7 @@ lexer.begin("header")
 # Alimentar o lexer
 lexer.jsonFile.write('[\n')
 
-for line in sys.stdin:
+for line in csvFile:
     lexer.input(line)
     for tok in lexer:
         print(tok)
