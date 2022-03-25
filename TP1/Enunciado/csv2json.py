@@ -42,7 +42,8 @@ def t_header_LISTSIZE(t):
     lexer.context.append("inicioLista")
     for i in range(minSize-2):
         lexer.context.append("lista")
-    lexer.context.append("fimLista")
+    if minSize > 1:
+        lexer.context.append("fimLista")
     return t
 
 
