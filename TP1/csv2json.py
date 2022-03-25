@@ -74,11 +74,7 @@ def t_header_AGREGATION(t):
     
     agreg_func = t.lexer.lexmatch.group("func")
 
-    
-
-
-
-    if (agreg_func == 'sum') or (agreg_func == 'media') or (agreg_func == 'max'):
+    if (agreg_func == 'sum') or (agreg_func == 'media') or (agreg_func == 'max') or (agreg_func == 'min'):
         for i in range(lexer.maxSize):
             lexer.agregation.pop(lexer.index)
             lexer.agregation.append(agreg_func)
@@ -86,15 +82,6 @@ def t_header_AGREGATION(t):
             lexer.headers.append(columnName + "_" + agreg_func)
         print(lexer.agregation)
         lexer.maxSize = 0                   # reset the max size variable after filling the agregation array
-
-    # elif agreg_func == 'media':
-    #     for j in range(lexer.maxSize):
-    #         lexer.agregation.pop(lexer.index)
-    #         lexer.agregation.append("media")
-    #         columnName = lexer.headers.pop(lexer.index)
-    #         lexer.headers.append(columnName + "_" + "media")
-    #     lexer.maxSize = 0                   # reset the max size variable after filling the agregation array
-        
 
 
 
@@ -121,26 +108,27 @@ def t_listReader_NEWLINE(t):
         lexer.jsonFile.write(
                 str("]\n\t}")                             
             )
-
-
         t.lexer.opList = []    
         lexer.index = 0
         t.lexer.begin("INITIAL")
         lexer.jsonFile.write(',\n\t{\n')
-
-
+        
 
     elif lexer.context[lexer.index] == "fimLista" and lexer.agregation[lexer.index] != "no_Agregation":
         opValue = 0
         for i in range(len(lexer.opList)):
             if (lexer.agregation[lexer.index] == "sum"):
                 opValue += int(lexer.opList[i])
-            elif lexer.agregation[lexer.index] == "media":
+            elif (lexer.agregation[lexer.index] == "media"):
                 opValue += int(lexer.opList[i])
-        
+            
         #caso a operação pretendida seja a media, temos que dividir pelo nº total de elementos
         if lexer.agregation[lexer.index] == "media":
             opValue = opValue/len(lexer.opList)
+        elif lexer.agregation[lexer.index] == "max":
+            opValue = max(lexer.opList)
+        elif lexer.agregation[lexer.index] == "min":
+            opValue = min(lexer.opList)
 
         lexer.jsonFile.write(
                 '\t\t"' + lexer.headers[lexer.index] + '" : "' + str(opValue) + '"\n\t}')
@@ -166,10 +154,10 @@ def t_listReader_SEPARATOR(t):
         
         for j in range(len(lexer.opList)-1):
             lexer.jsonFile.write(
-                str("," +lexer.opList[j+1]) )             #TODO: ultimo elemento da lista vai ter uma virgula a mais
+                str("," +lexer.opList[j+1]) )            
 
         lexer.jsonFile.write(
-                str("],\n")                             #TODO: temos que verificar se precisa da virgula (pq nao e o ultumo)
+                str("],\n")                             
             )
         t.lexer.opList = []    
         t.lexer.begin("INITIAL")
@@ -177,7 +165,6 @@ def t_listReader_SEPARATOR(t):
 
 
     elif lexer.context[lexer.index] == "fimLista" and lexer.context[lexer.index+1] != "fimLista" and lexer.agregation[lexer.index] != "no_Agregation":
-    # elif (lexer.context[lexer.index] == "fimLista" and lexer.agregation[lexer.index] != "no_Agregation" and ((lexer.index == len(lexer.agregation) -1) or lexer.agregation[lexer.index+1] == "no_Agregation")):
         opValue = 0
         for i in range(len(lexer.opList)):
             if (lexer.agregation[lexer.index] == "sum"):
@@ -188,6 +175,11 @@ def t_listReader_SEPARATOR(t):
         #caso a operação pretendida seja a media, temos que dividir pelo nº total de elementos
         if lexer.agregation[lexer.index] == "media":
             opValue = opValue/len(lexer.opList)
+        elif lexer.agregation[lexer.index] == "max":
+            opValue = max(lexer.opList)
+        elif lexer.agregation[lexer.index] == "min":
+            opValue = min(lexer.opList)
+
 
         lexer.jsonFile.write(
                 '\t\t"' + lexer.headers[lexer.index] + '" : "' + str(opValue) + '",\n')
