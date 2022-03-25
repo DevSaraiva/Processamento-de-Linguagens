@@ -16,35 +16,38 @@ states = [
 ]
 
 
-# def t_header_LISTSIZE(t):
-#     r'{(?P<min>\d+)(,(?P<max>\d+))?}'
-#     minSize = int(t.lexer.lexmatch.group("min"))
-#     maxSizeStr = t.lexer.lexmatch.group("max")
-
-#     if maxSizeStr:
-#         maxSize = int(t.lexer.lexmatch.group("max"))
-#     else:
-#         maxSize = minSize
-
-#     lexer.sizesList[lexer.index] = (minSize, maxSize)
-
-#     for i in range(maxSize-1):
-#         lexer.headers.append("lista")
-#     return t
-
-
 def t_header_LISTSIZE(t):
-    r'{(?P<min>\d+)}'
+      r'{(?P<min>\d+)(,(?P<max>\d+))?}'
+      minSize = int(t.lexer.lexmatch.group("min"))
+      maxSizeStr = t.lexer.lexmatch.group("max")
 
-    minSize = int(t.lexer.lexmatch.group("min"))
-    print("minsize: ", minSize)
-    lexer.context.pop(lexer.index)
-    lexer.context.append("inicioLista")
-    for i in range(minSize-2):
-        lexer.context.append("lista")
-    if minSize > 1:
-        lexer.context.append("fimLista")
-    return t
+      if maxSizeStr:
+          maxSize = int(t.lexer.lexmatch.group("max"))
+      else:
+          maxSize = minSize
+
+      #lexer.sizesList[lexer.index] = (minSize, maxSize)
+      lexer.context.pop(lexer.index)
+      lexer.context.append("inicioLista")
+      for i in range(maxSize-2):
+          lexer.context.append("lista")
+      if maxSize > 1:
+          lexer.context.append("fimLista")
+      return t
+
+
+# def t_header_LISTSIZE(t):
+#      r'{(?P<min>\d+)}'
+
+#      minSize = int(t.lexer.lexmatch.group("min"))
+#      print("minsize: ", minSize)
+#      lexer.context.pop(lexer.index)
+#      lexer.context.append("inicioLista")
+#      for i in range(minSize-2):
+#          lexer.context.append("lista")
+#      if minSize > 1:
+#          lexer.context.append("fimLista")
+#      return t
 
 
 def t_header_SEPARATOR(t):
@@ -87,7 +90,7 @@ def t_DATA(t):
     print("lexer index: ", lexer.index)
     print("lexer context: ", lexer.context)
 
-    if(lexer.index == len(lexer.headers) - 1):
+    if(lexer.index == len(lexer.context) - 1):
         if lexer.context[lexer.index] == "inicioLista":
             lexer.jsonFile.write(
                 '\t\t"' + lexer.headers[lexer.index] + '" : [' + str(t.value) + ']\n\t}'
@@ -101,10 +104,10 @@ def t_DATA(t):
                 '\t\t"' + lexer.headers[lexer.index] + '" : "' + str(t.value) + '"\n\t}')
 
     else:
-        if lexer.context[lexer.index] == "inicioLista" and lexer.context[lexer.index] != "normal":
+        if lexer.context[lexer.index] == "inicioLista" and lexer.context[lexer.index + 1] != "normal":
             lexer.jsonFile.write(
                 '\t\t"' + lexer.headers[lexer.index] + '" : [' + str(t.value) + ',')
-        elif lexer.context[lexer.index] == "inicioLista" and lexer.context[lexer.index] == "normal":
+        elif lexer.context[lexer.index] == "inicioLista" and lexer.context[lexer.index + 1] == "normal":
             lexer.jsonFile.write(
                 '\t\t"' + lexer.headers[lexer.index] + '" : [' + str(t.value) + '],\n')
         elif lexer.context[lexer.index] == "lista":

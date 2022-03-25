@@ -1,20 +1,17 @@
 [
 	{
-		"Número" : "3162",
-		"Nome" : "Cândido Faísca",
-		"Curso" : "Teatro",
-		"Notas" : [12]
-	},
-	{
-		"Número" : "7777",
-		"Nome" : "Cristiano Ronaldo",
-		"Curso" : "Desporto",
-		"Notas" : [17]
-	},
-	{
-		"Número" : "264",
-		"Nome" : "Marcelo Sousa",
-		"Curso" : "Ciência Política",
-		"Notas" : [18]
-	}
+		"Número" : "3162,C",
+		"Número" : "ndido",
+		"Número" : "Fa",
+		"Número" : "sca,Teatro,12,13,14,,
+",
+		"Número" : "7777,Cristiano",
+		"Número" : "Ronaldo,Desporto,17,12,20,11,12
+",
+		"Número" : "264,Marcelo",
+		"Número" : "Sousa,Ci",
+		"Número" : "ncia",
+		"Número" : "Pol",
+		"Número" : "tica,18,19,19,20,",
+
 ]
