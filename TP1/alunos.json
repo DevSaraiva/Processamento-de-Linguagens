@@ -2,22 +2,16 @@
 	{
 		"Número" : "3162",
 		"Nome" : "Cândido Faísca",
-		"Curso" : "Teatro",
-		"Notas_sum" : "26",
-		"Idade" : "99"
+		"Curso" : "Teatro"
 	},
 	{
 		"Número" : "7777",
 		"Nome" : "Cristiano Ronaldo",
-		"Curso" : "Desporto",
-		"Notas_sum" : "72",
-		"Idade" : "99"
+		"Curso" : "Desporto"
 	},
 	{
 		"Número" : "264",
 		"Nome" : "Marcelo Sousa",
-		"Curso" : "Ciência Política",
-		"Notas_sum" : "94",
-		"Idade" : "99"
+		"Curso" : "Ciência Política"
 	}
 ]
