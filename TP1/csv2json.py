@@ -29,10 +29,12 @@ def t_header_LISTSIZE(t):
     lexer.maxSize = maxSize
     lexer.context.pop(lexer.index)
     lexer.context.append("inicioLista")
-    for i in range(maxSize-2):          # menos 2 é o inicioLista e fimLista
+    for i in range(minSize-2):          # menos 2 é o inicioLista
         lexer.context.append("lista")
+
     if maxSize > 1:
-        lexer.context.append("fimLista")
+        for i in range(maxSize-minSize+1):
+            lexer.context.append("fimLista")
 
     for j in range(maxSize-1):
         lexer.headers.append(lexer.headers[lexer.index])
@@ -42,7 +44,6 @@ def t_header_LISTSIZE(t):
 def t_header_SEPARATOR(t):
     r','
     lexer.index += 1
-    return t
 
 
 def t_header_DATA(t):
@@ -50,7 +51,6 @@ def t_header_DATA(t):
     lexer.context.append("normal")
     lexer.agregation.append("no_Agregation")
     lexer.headers.append(t.value)
-    return t
 
 
 def t_header_NEWLINE(t):
@@ -64,7 +64,7 @@ def t_header_NEWLINE(t):
     lexer.jsonFile.write('\t{\n')
     lexer.index = 0
 
-    return t
+    lexer.line += 1
 
 
 def t_header_AGREGATION(t):
@@ -84,7 +84,6 @@ def t_header_AGREGATION(t):
 def t_listReader_DATA(t):
     r'[^,\n]+'
     lexer.opList.append(t.value)
-    return t
 
 
 def writeList(t, separator):
@@ -94,6 +93,17 @@ def writeList(t, separator):
     else:
         lexer.jsonFile.write(
             '\t\t"' + lexer.headers[lexer.index] + '" : [' + '"' + lexer.opList[0] + '"')
+
+    # calcular onde começa a lista
+
+    i = lexer.index
+
+    while lexer.context[i] != "inicioLista":
+        i -= 1
+
+    if(lexer.context[i + len(lexer.opList) - 1]) != "fimLista":
+        print(
+            "O ficheiro CSV possui um erro nos limites da lista na linha " + str(lexer.line))
 
     for j in range(len(lexer.opList)-1):
 
@@ -109,13 +119,11 @@ def writeList(t, separator):
             str("],\n")
         )
         t.lexer.opList = []
-        t.lexer.begin("INITIAL")
 
     else:
         lexer.jsonFile.write(str("]\n\t}"))
         t.lexer.opList = []
         lexer.index = 0
-        t.lexer.begin("INITIAL")
 
 
 def writeAgregation(t, separator):
@@ -143,21 +151,24 @@ def writeAgregation(t, separator):
             '\t\t"' + lexer.headers[lexer.index] + '" : ' + str(opValue) + '\n\t}')
 
     t.lexer.opList = []
-    t.lexer.begin("INITIAL")
 
 
 def t_listReader_NEWLINE(t):
     r'\n'
     if lexer.context[lexer.index] == "fimLista" and lexer.agregation[lexer.index] == "no_Agregation":
         writeList(t, False)
+        lexer.begin('INITIAL')
         lexer.jsonFile.write(',\n\t{\n')
 
     elif lexer.context[lexer.index] == "fimLista" and lexer.agregation[lexer.index] != "no_Agregation":
         writeAgregation(t, False)
+        lexer.begin('INITIAL')
         lexer.jsonFile.write(',\n\t{\n')
 
     lexer.index = 0
-    return t
+
+    if(lexer.context[lexer.index] == "inicioLista"):
+        lexer.begin('listReader')
 
 
 def t_listReader_SEPARATOR(t):
@@ -165,12 +176,16 @@ def t_listReader_SEPARATOR(t):
 
     if lexer.context[lexer.index] == "fimLista" and lexer.context[lexer.index+1] != "fimLista" and lexer.agregation[lexer.index] == "no_Agregation":
         writeList(t, True)
+        lexer.begin('INITIAL')
 
     elif lexer.context[lexer.index] == "fimLista" and lexer.context[lexer.index+1] != "fimLista" and lexer.agregation[lexer.index] != "no_Agregation":
         writeAgregation(t, True)
+        lexer.begin('INITIAL')
+
+    if(lexer.context[lexer.index + 1] == "inicioLista"):
+        lexer.begin('listReader')
 
     lexer.index += 1
-    return t
 
 
 def t_listReader_eof(t):
@@ -191,7 +206,6 @@ def t_SEPARATOR(t):
         lexer.begin("listReader")
 
     lexer.index += 1
-    return t
 
 
 def t_DATA(t):
@@ -205,8 +219,6 @@ def t_DATA(t):
         lexer.jsonFile.write(
             '\t\t"' + lexer.headers[lexer.index] + '" : "' + str(t.value) + '",\n')
 
-    return t
-
 
 def t_NEWLINE(t):
     r'\n'
@@ -217,7 +229,7 @@ def t_NEWLINE(t):
     else:
         t.lexer.begin("INITIAL")
     lexer.jsonFile.write(',\n\t{\n')
-    return t
+    lexer.line += 1
 
 
 def t_error(t):
@@ -245,6 +257,7 @@ lexer.agregation = []
 lexer.opList = []   # lista na qual se vai aplicar os operadores
 lexer.jsonFile = open(final_Filename, "w", encoding="utf-8")
 lexer.index = 0
+lexer.line = 1
 
 
 lexer.begin("header")
