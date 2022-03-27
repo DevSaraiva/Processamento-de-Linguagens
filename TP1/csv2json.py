@@ -1,5 +1,6 @@
 import ply.lex as lex
 import sys
+import re
 
 tokens = ["SEPARATOR", "DATA", "NEWLINE", "LISTSIZE", "AGREGATION"]
 
@@ -7,6 +8,12 @@ states = [
     ("header", "exclusive"),
     ("listReader", "inclusive")
 ]
+
+
+def is_number_regex(s):
+    if re.match("^\d+?\.\d+?$", s) is None:
+        return s.isdigit()
+    return True
 
 
 def t_header_LISTSIZE(t):
@@ -43,7 +50,6 @@ def t_header_DATA(t):
     lexer.context.append("normal")
     lexer.agregation.append("no_Agregation")
     lexer.headers.append(t.value)
-    lexer.sizesList.append(None)
     return t
 
 
@@ -82,7 +88,7 @@ def t_listReader_DATA(t):
 
 
 def writeList(t, separator):
-    if(lexer.opList[0].isnumeric()):
+    if(is_number_regex(lexer.opList[0])):
         lexer.jsonFile.write(
             '\t\t"' + lexer.headers[lexer.index] + '" : [' + lexer.opList[0])
     else:
@@ -91,7 +97,7 @@ def writeList(t, separator):
 
     for j in range(len(lexer.opList)-1):
 
-        if(lexer.opList[j+1].isnumeric()):
+        if(is_number_regex(lexer.opList[j+1])):
             lexer.jsonFile.write(
                 str("," + lexer.opList[j+1]))
         else:
