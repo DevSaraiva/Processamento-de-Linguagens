@@ -1,20 +1,20 @@
 [
 	{
-		"Número" : "3162",
-		"Nome" : "Cândido Faísca",
+		"Número" : "3212132",
+		"Nome" : "Faísca Mcqueen",
 		"Cursos" : ["Teatro","Politica","Arquitertura"],
 		"Notas_media" : 13.0
 	},
 	{
-		"Número" : "7777",
-		"Nome" : "Cristiano Ronaldo",
-		"Cursos" : ["Teatro","Politica","Arquitertura"],
+		"Número" : "7734234324",
+		"Nome" : "Cristina Ferreira",
+		"Cursos" : ["Musica","Engenharia","Matematica"],
 		"Notas_media" : 14.4
 	},
 	{
-		"Número" : "264",
-		"Nome" : "Marcelo Sousa",
-		"Cursos" : ["Teatro","Politica"],
+		"Número" : "34234223",
+		"Nome" : "Afonso Henriques",
+		"Cursos" : ["Enfermagem","RI","Medicina","Comunicação"],
 		"Notas_media" : 19.0
 	}
 ]

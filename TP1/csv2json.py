@@ -5,7 +5,7 @@ import re
 tokens = ["SEPARATOR", "DATA", "NEWLINE", "LISTSIZE", "AGREGATION"]
 
 states = [
-    ("header", "exclusive"),
+    ("header", "inclusive"),
     ("listReader", "inclusive")
 ]
 
@@ -182,11 +182,6 @@ def t_listReader_eof(t):
         writeAgregation(t, False)
 
     return None
-
-
-def t_LISTSIZE(t):
-    r'{(?P<min>\d+)(,(?P<max>\d+))?}'
-    return t
 
 
 def t_SEPARATOR(t):
