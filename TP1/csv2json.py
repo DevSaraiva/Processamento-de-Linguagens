@@ -9,6 +9,7 @@ states = [
     ("listReader", "inclusive")
 ]
 
+#verify if list element is a digit
 
 def is_number_regex(s):
     if re.match("^\d+?\.\d+?$", s) is None:
