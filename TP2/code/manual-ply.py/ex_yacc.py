@@ -1,12 +1,11 @@
 
 import ply.yacc as yacc
-from lexer import tokens
-
-
+from ex_lex import tokens
+ 
 precedence = (
-('left','+','-'),
-('left','*','/'),
-('right','UMINUS')
+    ('left','+','-'),
+    ('left','*','/'),
+    ('right','UMINUS')
 )
 
 

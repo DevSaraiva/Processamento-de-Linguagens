@@ -245,15 +245,15 @@ state 12
 
     +               reduce using rule 7 (exp -> - exp .)
     -               reduce using rule 7 (exp -> - exp .)
+    *               reduce using rule 7 (exp -> - exp .)
+    /               reduce using rule 7 (exp -> - exp .)
     $end            reduce using rule 7 (exp -> - exp .)
     )               reduce using rule 7 (exp -> - exp .)
-    *               shift and go to state 10
-    /               shift and go to state 11
 
-  ! *               [ reduce using rule 7 (exp -> - exp .) ]
-  ! /               [ reduce using rule 7 (exp -> - exp .) ]
   ! +               [ shift and go to state 8 ]
   ! -               [ shift and go to state 9 ]
+  ! *               [ shift and go to state 10 ]
+  ! /               [ shift and go to state 11 ]
 
 
 state 13
