@@ -1,7 +1,7 @@
 import ply.lex as lex
 
 
-literals = {'+','-','/','*','=','(',')'}
+literals = ['+','-','/','*','=','(',')']
 
 t_ignore = " \t\n"
 
@@ -10,11 +10,12 @@ tokens = [ 'VAR','NUMBER']
 
 def t_VAR(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    return('VAR',t.value())
+    return(t)
 
 def t_NUMBER(t):
-    r'\d+(\.\d+)?'
-    return('NUMBER',t.value())
+    r'\d+'
+    t.value = float(t.value)
+    return(t)
 
 def t_error(t):
     print(f"Illegal character '{t.value[0]}' , [{t.lexer.lineno}]")

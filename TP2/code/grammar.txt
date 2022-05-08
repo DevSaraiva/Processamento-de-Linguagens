@@ -1,0 +1,25 @@
+frase -> lex yacc
+
+lex -> LEXMARKER literals ignore tokens functions
+
+literals -> LITERALS EQUAL QM CHARACTERS  QM comment
+           | empty
+
+comment -> HASHTAG HASHTAG WORDS
+
+WORDS -> WORDS WORD
+          | WORD
+
+ignore -> IGNORE EQUAL QM CHARACTERS QM comment
+        | empty
+
+tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
+
+tokenNames -> tokenNames COMMA SQM UPPERWORD SQM
+            | SQM UPPERWORD SQM
+
+functions -> functions function
+            | function
+
+function -> RE RETURN LEFTBRACKET SQM UPPERWORD SQM COMMA SQM EXPRESSION SQM RIGHTBRACKET comment 
+            | RE ERROR LEFTBRACKET EXPRESSION COMMA EXPRESSION RIGHTBRACKET comment

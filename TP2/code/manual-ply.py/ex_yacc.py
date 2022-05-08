@@ -45,15 +45,15 @@ def p_exp_7(t):
 def p_exp_8(t):
     "exp : NUMBER"
     t[0] = t[1]
-    print(t[1])
+  
 
 def p_exp_9(t):
     "exp : VAR"
     t[0] = getval(t[1])
 
 def p_error(t):
-    #print(f"Syntax error at '{t.value}', [{t.lexer.lineno}]")
-    print(t)
+    print(f"Syntax error at '{t.value}', [{t.lexer.lineno}]")
+    
 
 def getval(n):
     if n not in parser.ts: print(f"Undefined name '{n}'")
