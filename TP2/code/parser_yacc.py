@@ -21,15 +21,19 @@
 # functions -> functions function
 #             | function
 
-# function -> RE RETURN LEFTBRACKET content RIGHTBRACKET comment 
+# function -> RE type LEFTBRACKET content RIGHTBRACKET comment 
 
 
-# content -> SQM UPPERWORD SQM COMMA TVALUE
-#          | SQM UPPERWORD SQM COMMA EXPRESSION
+#type -> RETURN
+#       | ERROR
+
+# content -> SQM UPPERWORD SQM COMMA returned
 #          | STRING COMMA EXPRESSION
 
 #returned -> TVALUE
 #            | EXPRESSION
+
+
 
 
  
@@ -39,19 +43,25 @@ from parser_lex import tokens
 
 def p_phrase(p):
     "frase : lex " #falta yacc
-    print('ola')
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
+    print(p[2])
 
 def p_literals(p):
     "literals : LITERALS EQUAL CHARACTERS comment"
+    p[0] = p[3]
+    print('ola')
 
 def p_literals_empty(p):
     "literals : "
+    p[0] = "adeus"
 
 def p_comment(p):
     "comment : HASHTAGS words"
+
+def p_comment_empty(p):
+    "comment : "    
 
 def p_words(p):
     "words : words WORD"
@@ -80,20 +90,32 @@ def p_tokenNames_stop(p):
 def p_functions(p):
     "functions : functions function"
 
-def p_functions_stop(p):
-    "functions : function"
-
 def p_functions_empty(p):
     "functions : "
 
-def p_function_tvalue(p):
-    "function : RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment"
+def p_function(p):
+    "function : RE type LEFTBRACKET content RIGHTBRACKET comment "
 
-def p_function_word(p):
-    "function : RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment"
 
-def p_function_expression(p):
-    "function : RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment"
+def p_content_returned(p):
+    "content : SQM UPPERWORD SQM COMMA returned"
+
+def p_content_string(p):
+    "content : STRING COMMA EXPRESSION"
+
+
+def p_returned_tvalue(p):
+    "returned : TVALUE"
+
+def p_returned_expression(p):
+    "returned : EXPRESSION"
+
+
+def p_type_return(p):
+    "type : RETURN"
+
+def p_type_error(p):
+    "type : ERROR"
 
 def p_error(t):
     print(f"Illegal character '{t}'")
@@ -106,6 +128,7 @@ parser = yacc.yacc()
 
 input = '''
 %%LEX
+%literals = "+-/*=()"
 
 '''
 #%%LEX

@@ -8,58 +8,65 @@ Rule 2     lex -> LEXMARKER literals ignore tokens functions
 Rule 3     literals -> LITERALS EQUAL CHARACTERS comment
 Rule 4     literals -> <empty>
 Rule 5     comment -> HASHTAGS words
-Rule 6     words -> words WORD
-Rule 7     words -> WORD
-Rule 8     ignore -> IGNORE EQUAL CHARACTERS comment
-Rule 9     ignore -> <empty>
-Rule 10    tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
-Rule 11    tokens -> <empty>
-Rule 12    tokenNames -> tokenNames COMMA SQM UPPERWORD SQM
-Rule 13    tokenNames -> SQM UPPERWORD SQM
-Rule 14    functions -> functions function
-Rule 15    functions -> function
+Rule 6     comment -> <empty>
+Rule 7     words -> words WORD
+Rule 8     words -> WORD
+Rule 9     ignore -> IGNORE EQUAL CHARACTERS comment
+Rule 10    ignore -> <empty>
+Rule 11    tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
+Rule 12    tokens -> <empty>
+Rule 13    tokenNames -> tokenNames COMMA SQM UPPERWORD SQM
+Rule 14    tokenNames -> SQM UPPERWORD SQM
+Rule 15    functions -> functions function
 Rule 16    functions -> <empty>
-Rule 17    function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-Rule 18    function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
-Rule 19    function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment
+Rule 17    function -> RE type LEFTBRACKET content RIGHTBRACKET comment
+Rule 18    content -> SQM UPPERWORD SQM COMMA returned
+Rule 19    content -> STRING COMMA EXPRESSION
+Rule 20    returned -> TVALUE
+Rule 21    returned -> EXPRESSION
+Rule 22    type -> RETURN
+Rule 23    type -> ERROR
 
 Terminals, with rules where they appear
 
-CHARACTERS           : 3 8
-COMMA                : 12 17 18 19
-EQUAL                : 3 8 10
-ERROR                : 19
-EXPRESSION           : 19
+CHARACTERS           : 3 9
+COMMA                : 13 18 19
+EQUAL                : 3 9 11
+ERROR                : 23
+EXPRESSION           : 19 21
 HASHTAGS             : 5
-IGNORE               : 8
-LEFTBRACKET          : 17 18 18 19
+IGNORE               : 9
+LEFTBRACKET          : 17
 LEXMARKER            : 2
 LITERALS             : 3
-RE                   : 17 18 19
-RETURN               : 17 18
-RIGHTBRACKET         : 17 18 18 19
-SLEFTBRACKET         : 10
-SQM                  : 12 12 13 13 17 17 18 18
-SRIGHTBRACKET        : 10
+RE                   : 17
+RETURN               : 22
+RIGHTBRACKET         : 17
+SLEFTBRACKET         : 11
+SQM                  : 13 13 14 14 18 18
+SRIGHTBRACKET        : 11
 STRING               : 19
-TOKENS               : 10
-TVALUE               : 17 18
-UPPERWORD            : 12 13 17 18
-WORD                 : 6 7 18
+TOKENS               : 11
+TVALUE               : 20
+UPPERWORD            : 13 14 18
+WORD                 : 7 8
 error                : 
 
 Nonterminals, with rules where they appear
 
-comment              : 3 8 10 17 18 19
+comment              : 3 9 11 17
+content              : 17
 frase                : 0
-function             : 14 15
-functions            : 2 14
+function             : 15
+functions            : 2 15
 ignore               : 2
 lex                  : 1
 literals             : 2
-tokenNames           : 10 12
+returned             : 18
+tokenNames           : 11 13
 tokens               : 2
-words                : 5 6
+type                 : 17
+words                : 5 7
 
 Parsing method: LALR
 
@@ -104,13 +111,13 @@ state 3
 state 4
 
     (2) lex -> LEXMARKER literals . ignore tokens functions
-    (8) ignore -> . IGNORE EQUAL CHARACTERS comment
-    (9) ignore -> .
+    (9) ignore -> . IGNORE EQUAL CHARACTERS comment
+    (10) ignore -> .
 
     IGNORE          shift and go to state 7
-    TOKENS          reduce using rule 9 (ignore -> .)
-    RE              reduce using rule 9 (ignore -> .)
-    $end            reduce using rule 9 (ignore -> .)
+    TOKENS          reduce using rule 10 (ignore -> .)
+    RE              reduce using rule 10 (ignore -> .)
+    $end            reduce using rule 10 (ignore -> .)
 
     ignore                         shift and go to state 6
 
@@ -124,18 +131,18 @@ state 5
 state 6
 
     (2) lex -> LEXMARKER literals ignore . tokens functions
-    (10) tokens -> . TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
-    (11) tokens -> .
+    (11) tokens -> . TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
+    (12) tokens -> .
 
     TOKENS          shift and go to state 10
-    RE              reduce using rule 11 (tokens -> .)
-    $end            reduce using rule 11 (tokens -> .)
+    RE              reduce using rule 12 (tokens -> .)
+    $end            reduce using rule 12 (tokens -> .)
 
     tokens                         shift and go to state 9
 
 state 7
 
-    (8) ignore -> IGNORE . EQUAL CHARACTERS comment
+    (9) ignore -> IGNORE . EQUAL CHARACTERS comment
 
     EQUAL           shift and go to state 11
 
@@ -150,93 +157,74 @@ state 8
 state 9
 
     (2) lex -> LEXMARKER literals ignore tokens . functions
-    (14) functions -> . functions function
-    (15) functions -> . function
+    (15) functions -> . functions function
     (16) functions -> .
-    (17) function -> . RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> . RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
-    (19) function -> . RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment
 
-  ! shift/reduce conflict for RE resolved as shift
+    RE              reduce using rule 16 (functions -> .)
     $end            reduce using rule 16 (functions -> .)
-    RE              shift and go to state 15
-
-  ! RE              [ reduce using rule 16 (functions -> .) ]
 
     functions                      shift and go to state 13
-    function                       shift and go to state 14
 
 state 10
 
-    (10) tokens -> TOKENS . EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
+    (11) tokens -> TOKENS . EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
 
-    EQUAL           shift and go to state 16
+    EQUAL           shift and go to state 14
 
 
 state 11
 
-    (8) ignore -> IGNORE EQUAL . CHARACTERS comment
+    (9) ignore -> IGNORE EQUAL . CHARACTERS comment
 
-    CHARACTERS      shift and go to state 17
+    CHARACTERS      shift and go to state 15
 
 
 state 12
 
     (3) literals -> LITERALS EQUAL CHARACTERS . comment
     (5) comment -> . HASHTAGS words
+    (6) comment -> .
 
-    HASHTAGS        shift and go to state 19
+    HASHTAGS        shift and go to state 17
+    IGNORE          reduce using rule 6 (comment -> .)
+    TOKENS          reduce using rule 6 (comment -> .)
+    RE              reduce using rule 6 (comment -> .)
+    $end            reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 18
+    comment                        shift and go to state 16
 
 state 13
 
     (2) lex -> LEXMARKER literals ignore tokens functions .
-    (14) functions -> functions . function
-    (17) function -> . RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> . RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
-    (19) function -> . RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment
+    (15) functions -> functions . function
+    (17) function -> . RE type LEFTBRACKET content RIGHTBRACKET comment
 
     $end            reduce using rule 2 (lex -> LEXMARKER literals ignore tokens functions .)
-    RE              shift and go to state 15
+    RE              shift and go to state 19
 
-    function                       shift and go to state 20
+    function                       shift and go to state 18
 
 state 14
 
-    (15) functions -> function .
+    (11) tokens -> TOKENS EQUAL . SLEFTBRACKET tokenNames SRIGHTBRACKET comment
 
-    RE              reduce using rule 15 (functions -> function .)
-    $end            reduce using rule 15 (functions -> function .)
+    SLEFTBRACKET    shift and go to state 20
 
 
 state 15
 
-    (17) function -> RE . RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE . RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
-    (19) function -> RE . ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment
+    (9) ignore -> IGNORE EQUAL CHARACTERS . comment
+    (5) comment -> . HASHTAGS words
+    (6) comment -> .
 
-    RETURN          shift and go to state 21
-    ERROR           shift and go to state 22
+    HASHTAGS        shift and go to state 17
+    TOKENS          reduce using rule 6 (comment -> .)
+    RE              reduce using rule 6 (comment -> .)
+    $end            reduce using rule 6 (comment -> .)
 
+    comment                        shift and go to state 21
 
 state 16
-
-    (10) tokens -> TOKENS EQUAL . SLEFTBRACKET tokenNames SRIGHTBRACKET comment
-
-    SLEFTBRACKET    shift and go to state 23
-
-
-state 17
-
-    (8) ignore -> IGNORE EQUAL CHARACTERS . comment
-    (5) comment -> . HASHTAGS words
-
-    HASHTAGS        shift and go to state 19
-
-    comment                        shift and go to state 24
-
-state 18
 
     (3) literals -> LITERALS EQUAL CHARACTERS comment .
 
@@ -246,330 +234,297 @@ state 18
     $end            reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
 
 
-state 19
+state 17
 
     (5) comment -> HASHTAGS . words
-    (6) words -> . words WORD
-    (7) words -> . WORD
+    (7) words -> . words WORD
+    (8) words -> . WORD
 
-    WORD            shift and go to state 26
+    WORD            shift and go to state 23
 
-    words                          shift and go to state 25
+    words                          shift and go to state 22
+
+state 18
+
+    (15) functions -> functions function .
+
+    RE              reduce using rule 15 (functions -> functions function .)
+    $end            reduce using rule 15 (functions -> functions function .)
+
+
+state 19
+
+    (17) function -> RE . type LEFTBRACKET content RIGHTBRACKET comment
+    (22) type -> . RETURN
+    (23) type -> . ERROR
+
+    RETURN          shift and go to state 25
+    ERROR           shift and go to state 26
+
+    type                           shift and go to state 24
 
 state 20
 
-    (14) functions -> functions function .
+    (11) tokens -> TOKENS EQUAL SLEFTBRACKET . tokenNames SRIGHTBRACKET comment
+    (13) tokenNames -> . tokenNames COMMA SQM UPPERWORD SQM
+    (14) tokenNames -> . SQM UPPERWORD SQM
 
-    RE              reduce using rule 14 (functions -> functions function .)
-    $end            reduce using rule 14 (functions -> functions function .)
+    SQM             shift and go to state 28
 
+    tokenNames                     shift and go to state 27
 
 state 21
 
-    (17) function -> RE RETURN . LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE RETURN . LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (9) ignore -> IGNORE EQUAL CHARACTERS comment .
 
-    LEFTBRACKET     shift and go to state 27
+    TOKENS          reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
+    RE              reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
+    $end            reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
 
 
 state 22
 
-    (19) function -> RE ERROR . LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment
-
-    LEFTBRACKET     shift and go to state 28
-
-
-state 23
-
-    (10) tokens -> TOKENS EQUAL SLEFTBRACKET . tokenNames SRIGHTBRACKET comment
-    (12) tokenNames -> . tokenNames COMMA SQM UPPERWORD SQM
-    (13) tokenNames -> . SQM UPPERWORD SQM
-
-    SQM             shift and go to state 30
-
-    tokenNames                     shift and go to state 29
-
-state 24
-
-    (8) ignore -> IGNORE EQUAL CHARACTERS comment .
-
-    TOKENS          reduce using rule 8 (ignore -> IGNORE EQUAL CHARACTERS comment .)
-    RE              reduce using rule 8 (ignore -> IGNORE EQUAL CHARACTERS comment .)
-    $end            reduce using rule 8 (ignore -> IGNORE EQUAL CHARACTERS comment .)
-
-
-state 25
-
     (5) comment -> HASHTAGS words .
-    (6) words -> words . WORD
+    (7) words -> words . WORD
 
     IGNORE          reduce using rule 5 (comment -> HASHTAGS words .)
     TOKENS          reduce using rule 5 (comment -> HASHTAGS words .)
     RE              reduce using rule 5 (comment -> HASHTAGS words .)
     $end            reduce using rule 5 (comment -> HASHTAGS words .)
-    WORD            shift and go to state 31
+    WORD            shift and go to state 29
+
+
+state 23
+
+    (8) words -> WORD .
+
+    WORD            reduce using rule 8 (words -> WORD .)
+    IGNORE          reduce using rule 8 (words -> WORD .)
+    TOKENS          reduce using rule 8 (words -> WORD .)
+    RE              reduce using rule 8 (words -> WORD .)
+    $end            reduce using rule 8 (words -> WORD .)
+
+
+state 24
+
+    (17) function -> RE type . LEFTBRACKET content RIGHTBRACKET comment
+
+    LEFTBRACKET     shift and go to state 30
+
+
+state 25
+
+    (22) type -> RETURN .
+
+    LEFTBRACKET     reduce using rule 22 (type -> RETURN .)
 
 
 state 26
 
-    (7) words -> WORD .
+    (23) type -> ERROR .
 
-    WORD            reduce using rule 7 (words -> WORD .)
-    IGNORE          reduce using rule 7 (words -> WORD .)
-    TOKENS          reduce using rule 7 (words -> WORD .)
-    RE              reduce using rule 7 (words -> WORD .)
-    $end            reduce using rule 7 (words -> WORD .)
+    LEFTBRACKET     reduce using rule 23 (type -> ERROR .)
 
 
 state 27
 
-    (17) function -> RE RETURN LEFTBRACKET . SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE RETURN LEFTBRACKET . SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames . SRIGHTBRACKET comment
+    (13) tokenNames -> tokenNames . COMMA SQM UPPERWORD SQM
 
-    SQM             shift and go to state 32
+    SRIGHTBRACKET   shift and go to state 31
+    COMMA           shift and go to state 32
 
 
 state 28
 
-    (19) function -> RE ERROR LEFTBRACKET . STRING COMMA EXPRESSION RIGHTBRACKET comment
+    (14) tokenNames -> SQM . UPPERWORD SQM
 
-    STRING          shift and go to state 33
+    UPPERWORD       shift and go to state 33
 
 
 state 29
 
-    (10) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames . SRIGHTBRACKET comment
-    (12) tokenNames -> tokenNames . COMMA SQM UPPERWORD SQM
+    (7) words -> words WORD .
 
-    SRIGHTBRACKET   shift and go to state 34
-    COMMA           shift and go to state 35
+    WORD            reduce using rule 7 (words -> words WORD .)
+    IGNORE          reduce using rule 7 (words -> words WORD .)
+    TOKENS          reduce using rule 7 (words -> words WORD .)
+    RE              reduce using rule 7 (words -> words WORD .)
+    $end            reduce using rule 7 (words -> words WORD .)
 
 
 state 30
 
-    (13) tokenNames -> SQM . UPPERWORD SQM
+    (17) function -> RE type LEFTBRACKET . content RIGHTBRACKET comment
+    (18) content -> . SQM UPPERWORD SQM COMMA returned
+    (19) content -> . STRING COMMA EXPRESSION
 
-    UPPERWORD       shift and go to state 36
+    SQM             shift and go to state 35
+    STRING          shift and go to state 36
 
+    content                        shift and go to state 34
 
 state 31
 
-    (6) words -> words WORD .
+    (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET . comment
+    (5) comment -> . HASHTAGS words
+    (6) comment -> .
 
-    WORD            reduce using rule 6 (words -> words WORD .)
-    IGNORE          reduce using rule 6 (words -> words WORD .)
-    TOKENS          reduce using rule 6 (words -> words WORD .)
-    RE              reduce using rule 6 (words -> words WORD .)
-    $end            reduce using rule 6 (words -> words WORD .)
+    HASHTAGS        shift and go to state 17
+    RE              reduce using rule 6 (comment -> .)
+    $end            reduce using rule 6 (comment -> .)
 
+    comment                        shift and go to state 37
 
 state 32
 
-    (17) function -> RE RETURN LEFTBRACKET SQM . UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE RETURN LEFTBRACKET SQM . UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (13) tokenNames -> tokenNames COMMA . SQM UPPERWORD SQM
 
-    UPPERWORD       shift and go to state 37
+    SQM             shift and go to state 38
 
 
 state 33
 
-    (19) function -> RE ERROR LEFTBRACKET STRING . COMMA EXPRESSION RIGHTBRACKET comment
+    (14) tokenNames -> SQM UPPERWORD . SQM
 
-    COMMA           shift and go to state 38
+    SQM             shift and go to state 39
 
 
 state 34
 
-    (10) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET . comment
-    (5) comment -> . HASHTAGS words
+    (17) function -> RE type LEFTBRACKET content . RIGHTBRACKET comment
 
-    HASHTAGS        shift and go to state 19
+    RIGHTBRACKET    shift and go to state 40
 
-    comment                        shift and go to state 39
 
 state 35
 
-    (12) tokenNames -> tokenNames COMMA . SQM UPPERWORD SQM
+    (18) content -> SQM . UPPERWORD SQM COMMA returned
 
-    SQM             shift and go to state 40
+    UPPERWORD       shift and go to state 41
 
 
 state 36
 
-    (13) tokenNames -> SQM UPPERWORD . SQM
-
-    SQM             shift and go to state 41
-
-
-state 37
-
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD . COMMA TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD . COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (19) content -> STRING . COMMA EXPRESSION
 
     COMMA           shift and go to state 42
 
 
+state 37
+
+    (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .
+
+    RE              reduce using rule 11 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
+    $end            reduce using rule 11 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
+
+
 state 38
 
-    (19) function -> RE ERROR LEFTBRACKET STRING COMMA . EXPRESSION RIGHTBRACKET comment
+    (13) tokenNames -> tokenNames COMMA SQM . UPPERWORD SQM
 
-    EXPRESSION      shift and go to state 43
+    UPPERWORD       shift and go to state 43
 
 
 state 39
 
-    (10) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .
+    (14) tokenNames -> SQM UPPERWORD SQM .
 
-    RE              reduce using rule 10 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
-    $end            reduce using rule 10 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
+    SRIGHTBRACKET   reduce using rule 14 (tokenNames -> SQM UPPERWORD SQM .)
+    COMMA           reduce using rule 14 (tokenNames -> SQM UPPERWORD SQM .)
 
 
 state 40
 
-    (12) tokenNames -> tokenNames COMMA SQM . UPPERWORD SQM
+    (17) function -> RE type LEFTBRACKET content RIGHTBRACKET . comment
+    (5) comment -> . HASHTAGS words
+    (6) comment -> .
 
-    UPPERWORD       shift and go to state 44
+    HASHTAGS        shift and go to state 17
+    RE              reduce using rule 6 (comment -> .)
+    $end            reduce using rule 6 (comment -> .)
 
+    comment                        shift and go to state 44
 
 state 41
 
-    (13) tokenNames -> SQM UPPERWORD SQM .
+    (18) content -> SQM UPPERWORD . SQM COMMA returned
 
-    SRIGHTBRACKET   reduce using rule 13 (tokenNames -> SQM UPPERWORD SQM .)
-    COMMA           reduce using rule 13 (tokenNames -> SQM UPPERWORD SQM .)
+    SQM             shift and go to state 45
 
 
 state 42
 
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA . TVALUE SQM RIGHTBRACKET comment
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA . WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (19) content -> STRING COMMA . EXPRESSION
 
-    TVALUE          shift and go to state 45
-    WORD            shift and go to state 46
+    EXPRESSION      shift and go to state 46
 
 
 state 43
 
-    (19) function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION . RIGHTBRACKET comment
+    (13) tokenNames -> tokenNames COMMA SQM UPPERWORD . SQM
 
-    RIGHTBRACKET    shift and go to state 47
+    SQM             shift and go to state 47
 
 
 state 44
 
-    (12) tokenNames -> tokenNames COMMA SQM UPPERWORD . SQM
+    (17) function -> RE type LEFTBRACKET content RIGHTBRACKET comment .
 
-    SQM             shift and go to state 48
+    RE              reduce using rule 17 (function -> RE type LEFTBRACKET content RIGHTBRACKET comment .)
+    $end            reduce using rule 17 (function -> RE type LEFTBRACKET content RIGHTBRACKET comment .)
 
 
 state 45
 
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE . SQM RIGHTBRACKET comment
+    (18) content -> SQM UPPERWORD SQM . COMMA returned
 
-    SQM             shift and go to state 49
+    COMMA           shift and go to state 48
 
 
 state 46
 
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD . LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (19) content -> STRING COMMA EXPRESSION .
 
-    LEFTBRACKET     shift and go to state 50
+    RIGHTBRACKET    reduce using rule 19 (content -> STRING COMMA EXPRESSION .)
 
 
 state 47
 
-    (19) function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET . comment
-    (5) comment -> . HASHTAGS words
+    (13) tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .
 
-    HASHTAGS        shift and go to state 19
+    SRIGHTBRACKET   reduce using rule 13 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
+    COMMA           reduce using rule 13 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
 
-    comment                        shift and go to state 51
 
 state 48
 
-    (12) tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .
+    (18) content -> SQM UPPERWORD SQM COMMA . returned
+    (20) returned -> . TVALUE
+    (21) returned -> . EXPRESSION
 
-    SRIGHTBRACKET   reduce using rule 12 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
-    COMMA           reduce using rule 12 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
+    TVALUE          shift and go to state 50
+    EXPRESSION      shift and go to state 51
 
+    returned                       shift and go to state 49
 
 state 49
 
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM . RIGHTBRACKET comment
+    (18) content -> SQM UPPERWORD SQM COMMA returned .
 
-    RIGHTBRACKET    shift and go to state 52
+    RIGHTBRACKET    reduce using rule 18 (content -> SQM UPPERWORD SQM COMMA returned .)
 
 
 state 50
 
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET . TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment
+    (20) returned -> TVALUE .
 
-    TVALUE          shift and go to state 53
+    RIGHTBRACKET    reduce using rule 20 (returned -> TVALUE .)
 
 
 state 51
 
-    (19) function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment .
+    (21) returned -> EXPRESSION .
 
-    RE              reduce using rule 19 (function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment .)
-    $end            reduce using rule 19 (function -> RE ERROR LEFTBRACKET STRING COMMA EXPRESSION RIGHTBRACKET comment .)
+    RIGHTBRACKET    reduce using rule 21 (returned -> EXPRESSION .)
 
-
-state 52
-
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET . comment
-    (5) comment -> . HASHTAGS words
-
-    HASHTAGS        shift and go to state 19
-
-    comment                        shift and go to state 54
-
-state 53
-
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE . RIGHTBRACKET SQM RIGHTBRACKET comment
-
-    RIGHTBRACKET    shift and go to state 55
-
-
-state 54
-
-    (17) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment .
-
-    RE              reduce using rule 17 (function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment .)
-    $end            reduce using rule 17 (function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA TVALUE SQM RIGHTBRACKET comment .)
-
-
-state 55
-
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET . SQM RIGHTBRACKET comment
-
-    SQM             shift and go to state 56
-
-
-state 56
-
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM . RIGHTBRACKET comment
-
-    RIGHTBRACKET    shift and go to state 57
-
-
-state 57
-
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET . comment
-    (5) comment -> . HASHTAGS words
-
-    HASHTAGS        shift and go to state 19
-
-    comment                        shift and go to state 58
-
-state 58
-
-    (18) function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment .
-
-    RE              reduce using rule 18 (function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment .)
-    $end            reduce using rule 18 (function -> RE RETURN LEFTBRACKET SQM UPPERWORD COMMA WORD LEFTBRACKET TVALUE RIGHTBRACKET SQM RIGHTBRACKET comment .)
-
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for RE in state 9 resolved as shift
