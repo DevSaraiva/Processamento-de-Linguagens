@@ -2,7 +2,7 @@
 
 # lex -> LEXMARKER literals ignore tokens functions
 
-# literals -> LITERALS EQUAL CHARACTERS comment
+# literals -> LITERALS EQUAL QM CHARACTERS QM comment
 #            | empty
 
 # comment -> HASHTAGS words
@@ -11,7 +11,7 @@
 # words -> words WORD
 #           | WORD
 
-# ignore -> IGNORE EQUAL CHARACTERS  comment
+# ignore -> IGNORE EQUAL QM CHARACTERS QM  comment
 #         | empty
 
 # tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
