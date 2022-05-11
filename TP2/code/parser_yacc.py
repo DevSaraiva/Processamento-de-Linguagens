@@ -9,7 +9,6 @@ def p_phrase(p):
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
-    print(p[5])
 
     #write imports
 
