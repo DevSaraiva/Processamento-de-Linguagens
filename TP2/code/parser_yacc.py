@@ -135,37 +135,37 @@ def p_rl_l(p):
 
 
 
-# def p_nametokensprec(p):
-#     "nametokensprec : nametokensprec COMMA CHARACTERS"
-#     p[0] = f'{p[1]}, {p[3]}'
+def p_nametokensprec(p):
+    "nametokensprec : nametokensprec COMMA CHARACTERS"
+    p[0] = f'{p[1]}, {p[3]}'
 
-# def p_nametokensprec_Empty(p):
-#     "nametokensprec :"
-#     p[0] = ""
+def p_nametokensprec_Empty(p):
+    "nametokensprec :"
+    p[0] = ""
 
-# def p_vars(p):
-#     "vars : NAMEVAR EQUAL INITVAR"
-#     p[0] = f'{p[1]} = {3}'
+def p_vars(p):
+    "vars : NAMEVAR EQUAL INITVAR"
+    p[0] = f'{p[1]} = {3}'
 
-# def p_prods(p):
-#     "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
-#     p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+def p_prods(p):
+    "prods : NAMEPROD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER"
+    p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
 
-#     # def p_{p[0]}(p):  \n
-#     # \t    "{p[3]}"    \n
-#     # \t    {p[5]}      \n
+    # def p_{p[0]}(p):  \n
+    # \t    "{p[3]}"    \n
+    # \t    {p[5]}      \n
 
-# def p_functionsyacc(p):
-#     "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
-#     p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
+def p_functionsyacc(p):
+    "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
+    p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
 
-# def p_functionsyacc_Empty(p):
-#     "functionsyacc :"
-#     p[0] = ""
+def p_functionsyacc_Empty(p):
+    "functionsyacc :"
+    p[0] = ""
 
-# def p_parse(p):
-#     "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
-#     p[0] = f"y.parse({p[3]})"
+def p_parse(p):
+    "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    p[0] = f"y.parse({p[3]})"
 
 
 # Build the parser
