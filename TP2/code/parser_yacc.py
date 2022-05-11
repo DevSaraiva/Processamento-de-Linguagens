@@ -9,23 +9,25 @@ def p_lex(p):
     print(p[1])
     print(p[2])
     print(p[3])
+    print(p[4])
+    print(p[5])
 
 def p_literals(p):
     "literals : LITERALS EQUAL CHARACTERS comment"
-    p[0] = repr(p[3])
-    print(p[2])
-
+    p[0] = ((p[3]),p[4])
+    
 def p_literals_empty(p):
     "literals : "
     p[0] = "literals vazio"
 
 def p_comment(p):
     "comment : HASHTAGS words"
-    print(f"comment {p[2]}")
+    p[0] = p[2]
+    
 
 def p_comment_empty(p):
     "comment : "
-    print("sem comentários")
+    
 
 def p_words(p):
     "words : words WORD"
@@ -37,15 +39,14 @@ def p_words_stop(p):
 
 def p_ignore(p):
     "ignore : IGNORE EQUAL CHARACTERS comment"
-    p[0] = repr(p[3])
+    p[0] = (p[3],p[4])
 
 def p_ignore_empty(p):
     "ignore : "
 
 def p_tokens(p):
     "tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment"
-    print(p[4])
-
+    p[0] = (p[4],p[6])
 
 def p_tokens_empty(p):
     "tokens : "
@@ -60,35 +61,35 @@ def p_tokenNames_stop(p):
 
 def p_functions(p):
     "functions : functions function"
+    p[0] = p[1] + [p[2]]
 
 def p_functions_empty(p):
     "functions : "
+    p[0] = []
 
 def p_function(p):
     "function : RE LEFTBRACKET content RIGHTBRACKET comment "
+    p[0] = (p[1],p[3],p[5])
     print(p[1])
+    print(p[0])
 
 
 def p_content_returned(p):
     "content : SQM UPPERWORD SQM COMMA EXPRESSION"
-    print(p[2])
-    print(p[5])
-
+    p[0] = (p[2],p[5])
 
 def p_content_returnedWord(p):
     "content : SQM UPPERWORD SQM COMMA WORD"
-    print(p[2])
-    print(p[5])
+    p[0] = (p[2],p[5])
 
 def p_content_string(p):
     "content : STRING COMMA EXPRESSION"
-    print(p[1])
-    print(p[3])
+    p[0] = (p[1],p[3])
+
 
 def p_content_characters(p):
     "content : CHARACTERS COMMA EXPRESSION"
-    print(p[1])
-    print(p[3])
+    p[0] = (p[1],p[3])
 
 
 
