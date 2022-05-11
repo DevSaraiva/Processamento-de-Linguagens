@@ -93,7 +93,7 @@ def p_content_characters(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence" # vars prods functionsyacc INITYACC parse"
+    "yacc : YACCMARKER precedence vars prods functionsyacc INITYACC parse"
     print(p[1])
 
 def p_precedence(p):
@@ -109,7 +109,7 @@ def p_tokensprecedences_unico(p):
      " tokensprecedences : tokenprecedence"
 
 def p_tokenprecedence(p):
-     "tokenprecedence : LEFTBRACKET rl COMMA  RIGTHBRACKET" # nametokensprec
+     "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGTHBRACKET"
 
 def p_rl_r(p):
      "rl : SQM RIGHT SQM"
@@ -120,6 +120,39 @@ def p_rl_l(p):
 def p_error(p):
      print(f"Illegal token yacc'{p}'")
         
+
+
+def p_nametokensprec(p):
+    "nametokensprec : nametokensprec COMMA CHARACTERS"
+    p[0] = f'{p[1]}, {p[3]}'
+
+def p_nametokensprec_Empty(p):
+    "nametokensprec :"
+    p[0] = ""
+
+def p_vars(p):
+    "vars : NAMEVAR EQUAL INITVAR"
+    p[0] = f'{p[1]} = {3}'
+
+def p_prods(p):
+    "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
+    p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+
+    # def p_{p[0]}(p):  \n
+    # \t    "{p[3]}"    \n
+    # \t    {p[5]}      \n
+
+def p_functionsyacc(p):
+    "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
+    p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
+
+def p_functionsyacc_Empty(p):
+    "functionsyacc :"
+    p[0] = ""
+
+def p_parse(p):
+    "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    p[0] = f"y.parse({p[3]})"
 
 
 # Build the parser
@@ -141,6 +174,34 @@ t.lexer.skip(1) )
     ('left','*','/'),
     ('right','UMINUS'),
 ]
+
+# symboltable : dictionary of variables
+ts = { }
+
+stat : VAR '=' exp          { ts[t[1]] = t[3] }
+stat : exp                  { print(t[1]) }
+exp : exp '+' exp           { t[0] = t[1] + t[3] }
+exp : exp '-' exp           { t[0] = t[1] - t[3] }
+exp : exp '*' exp           { t[0] = t[1] * t[3] }
+exp : exp '/' exp           { t[0] = t[1] / t[3] }
+exp : '-' exp %prec UMINUS  { t[0] = -t[2] }
+exp : '(' exp ')'           { t[0] = t[2] }
+exp : NUMBER                { t[0] = t[1] }
+exp : VAR                   { t[0] = getval(t[1]) }
+
+
+
+%%
+
+def p_error(t):
+    print(f"Syntax error at ’{t.value}’, [{t.lexer.lineno}]")
+
+def getval(n):
+    if n not in ts: print(f"Undefined name ’{n}’")
+    return ts.get(n,0)
+
+y=yacc()
+y.parse("3+4*7")
 '''
 
 
