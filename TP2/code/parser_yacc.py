@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from parser_lex import tokens
 
 def p_phrase(p):
-    "frase : lex " #falta yacc
+    "frase : lex yacc" #falta yacc
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
@@ -92,6 +92,31 @@ def p_content_characters(p):
 
 
 
+def p_yacc(p):
+    "yacc : YACCMARKER precedence" # vars prods functionsyacc INITYACC parse"
+    print(p[1])
+
+def p_precedence(p):
+     "precedence : PRECEDENCE EQUAL SLEFTBRACKET tokensprecedences SRIGHTBRACKET"
+
+def p_precedence_empty(p):
+     "precedence : "
+
+def p_tokensprecedences(p):
+     "tokensprecedences : tokenprecedences COMMA tokensprecedences"
+
+def p_tokensprecedences_unico(p):
+     " tokensprecedences : tokenprecedence"
+
+def p_tokenprecedence(p):
+     "tokenprecedence : LEFTBRACKET rl COMMA  RIGTHBRACKET" # nametokensprec
+
+def p_rl_r(p):
+     "rl : SQM RIGHT SQM"
+
+def p_rl_l(p):
+     "rl : SQM LEFT SQM"
+
 def p_error(p):
      print(f"Illegal token yacc'{p}'")
         
@@ -110,7 +135,12 @@ input = '''
 \d+(\.\d+)? return('NUMBER', float(t.value))
 .   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
 t.lexer.skip(1) )
-
+%%YACC
+%precedence = [
+    ('left','+','-'),
+    ('left','*','/'),
+    ('right','UMINUS'),
+]
 '''
 
 
