@@ -74,10 +74,22 @@ def p_content_returned(p):
     print(p[2])
     print(p[5])
 
+
+def p_content_returnedWord(p):
+    "content : SQM UPPERWORD SQM COMMA WORD"
+    print(p[2])
+    print(p[5])
+
 def p_content_string(p):
     "content : STRING COMMA EXPRESSION"
     print(p[1])
     print(p[3])
+
+def p_content_characters(p):
+    "content : CHARACTERS COMMA EXPRESSION"
+    print(p[1])
+    print(p[3])
+
 
 
 def p_error(p):
@@ -100,14 +112,9 @@ input = '''
 t.lexer.skip(1) )
 
 '''
-#%%LEX
-#%literals = "+-/*=()" ##singlechar
-# %ignore = " \t\n"
-# %tokens = [ 'VAR','NUMBER' ]
-# [a-zA-Z_][a-zA-Z0-9_]* return('VAR', t.value) 
-# \d+(\.\d+)? return('NUMBER', float(t.value))
-# .   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
-# t.lexer.skip(1) )
+
+
+
 
 
 parser.parse(input)

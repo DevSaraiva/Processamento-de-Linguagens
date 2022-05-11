@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'CHARACTERS COMMA EQUAL EXPRESSION HASHTAGS IGNORE LEFTBRACKET LEXMARKER LITERALS NEWLINE RE RIGHTBRACKET SLEFTBRACKET SPACE SQM SRIGHTBRACKET STRING TOKENS TVALUE UPPERWORD WORDfrase : lex lex : LEXMARKER literals ignore tokens functionsliterals : LITERALS EQUAL SPACE CHARACTERS commentliterals : comment : HASHTAGS wordscomment : words : words WORDwords : WORDignore : IGNORE EQUAL SPACE CHARACTERS commentignore : tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET commenttokens : tokenNames : tokenNames COMMA SQM UPPERWORD SQMtokenNames : SQM UPPERWORD SQMfunctions : functions functionfunctions : function : RE LEFTBRACKET content RIGHTBRACKET comment content : SQM UPPERWORD SQM COMMA EXPRESSIONcontent : STRING COMMA EXPRESSION'
+_lr_signature = 'CHARACTERS COMMA EQUAL EXPRESSION HASHTAGS IGNORE LEFTBRACKET LEXMARKER LITERALS RE RIGHTBRACKET SLEFTBRACKET SPACE SQM SRIGHTBRACKET STRING TOKENS UPPERWORD WORDfrase : lex lex : LEXMARKER literals ignore tokens functionsliterals : LITERALS EQUAL SPACE CHARACTERS commentliterals : comment : HASHTAGS wordscomment : words : words WORDwords : WORDignore : IGNORE EQUAL SPACE CHARACTERS commentignore : tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET commenttokens : tokenNames : tokenNames COMMA SQM UPPERWORD SQMtokenNames : SQM UPPERWORD SQMfunctions : functions functionfunctions : function : RE LEFTBRACKET content RIGHTBRACKET comment content : SQM UPPERWORD SQM COMMA EXPRESSIONcontent : SQM UPPERWORD SQM COMMA WORDcontent : STRING COMMA EXPRESSIONcontent : CHARACTERS COMMA EXPRESSION'
     
-_lr_action_items = {'LEXMARKER':([0,],[3,]),'$end':([1,2,3,4,6,9,13,16,17,20,21,26,27,28,32,35,36,39,42,],[0,-1,-4,-10,-12,-16,-2,-6,-15,-6,-3,-9,-5,-8,-6,-7,-6,-11,-17,]),'LITERALS':([3,],[5,]),'IGNORE':([3,4,16,21,27,28,35,],[-4,7,-6,-3,-5,-8,-7,]),'TOKENS':([3,4,6,16,20,21,26,27,28,35,],[-4,-10,10,-6,-6,-3,-9,-5,-8,-7,]),'RE':([3,4,6,9,13,16,17,20,21,26,27,28,32,35,36,39,42,],[-4,-10,-12,-16,18,-6,-15,-6,-3,-9,-5,-8,-6,-7,-6,-11,-17,]),'EQUAL':([5,7,10,],[8,11,14,]),'SPACE':([8,11,],[12,15,]),'CHARACTERS':([12,15,],[16,20,]),'SLEFTBRACKET':([14,],[19,]),'HASHTAGS':([16,20,32,36,],[22,22,22,22,]),'LEFTBRACKET':([18,],[23,]),'SQM':([19,23,33,34,37,45,],[25,30,40,41,43,47,]),'WORD':([22,27,28,35,],[28,35,-8,-7,]),'STRING':([23,],[31,]),'SRIGHTBRACKET':([24,41,47,],[32,-14,-13,]),'COMMA':([24,31,41,43,47,],[33,38,-14,46,-13,]),'UPPERWORD':([25,30,40,],[34,37,45,]),'RIGHTBRACKET':([29,44,48,],[36,-19,-18,]),'EXPRESSION':([38,46,],[44,48,]),}
+_lr_action_items = {'LEXMARKER':([0,],[3,]),'$end':([1,2,3,4,6,9,13,16,17,20,21,26,27,28,33,36,37,41,44,],[0,-1,-4,-10,-12,-16,-2,-6,-15,-6,-3,-9,-5,-8,-6,-7,-6,-11,-17,]),'LITERALS':([3,],[5,]),'IGNORE':([3,4,16,21,27,28,36,],[-4,7,-6,-3,-5,-8,-7,]),'TOKENS':([3,4,6,16,20,21,26,27,28,36,],[-4,-10,10,-6,-6,-3,-9,-5,-8,-7,]),'RE':([3,4,6,9,13,16,17,20,21,26,27,28,33,36,37,41,44,],[-4,-10,-12,-16,18,-6,-15,-6,-3,-9,-5,-8,-6,-7,-6,-11,-17,]),'EQUAL':([5,7,10,],[8,11,14,]),'SPACE':([8,11,],[12,15,]),'CHARACTERS':([12,15,23,],[16,20,32,]),'SLEFTBRACKET':([14,],[19,]),'HASHTAGS':([16,20,33,37,],[22,22,22,22,]),'LEFTBRACKET':([18,],[23,]),'SQM':([19,23,34,35,38,48,],[25,30,42,43,45,50,]),'WORD':([22,27,28,36,49,],[28,36,-8,-7,52,]),'STRING':([23,],[31,]),'SRIGHTBRACKET':([24,43,50,],[33,-14,-13,]),'COMMA':([24,31,32,43,45,50,],[34,39,40,-14,49,-13,]),'UPPERWORD':([25,30,42,],[35,38,48,]),'RIGHTBRACKET':([29,46,47,51,52,],[37,-20,-21,-18,-19,]),'EXPRESSION':([39,40,49,],[46,47,51,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'frase':([0,],[1,]),'lex':([0,],[2,]),'literals':([3,],[4,]),'ignore':([4,],[6,]),'tokens':([6,],[9,]),'functions':([9,],[13,]),'function':([13,],[17,]),'comment':([16,20,32,36,],[21,26,39,42,]),'tokenNames':([19,],[24,]),'words':([22,],[27,]),'content':([23,],[29,]),}
+_lr_goto_items = {'frase':([0,],[1,]),'lex':([0,],[2,]),'literals':([3,],[4,]),'ignore':([4,],[6,]),'tokens':([6,],[9,]),'functions':([9,],[13,]),'function':([13,],[17,]),'comment':([16,20,33,37,],[21,26,41,44,]),'tokenNames':([19,],[24,]),'words':([22,],[27,]),'content':([23,],[29,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -44,6 +44,8 @@ _lr_productions = [
   ('functions -> functions function','functions',2,'p_functions','parser_yacc.py',62),
   ('functions -> <empty>','functions',0,'p_functions_empty','parser_yacc.py',65),
   ('function -> RE LEFTBRACKET content RIGHTBRACKET comment','function',5,'p_function','parser_yacc.py',68),
-  ('content -> SQM UPPERWORD SQM COMMA EXPRESSION','content',5,'p_content_returned','parser_yacc.py',72),
-  ('content -> STRING COMMA EXPRESSION','content',3,'p_content_string','parser_yacc.py',75),
+  ('content -> SQM UPPERWORD SQM COMMA EXPRESSION','content',5,'p_content_returned','parser_yacc.py',73),
+  ('content -> SQM UPPERWORD SQM COMMA WORD','content',5,'p_content_returnedWord','parser_yacc.py',79),
+  ('content -> STRING COMMA EXPRESSION','content',3,'p_content_string','parser_yacc.py',84),
+  ('content -> CHARACTERS COMMA EXPRESSION','content',3,'p_content_characters','parser_yacc.py',89),
 ]

@@ -3,62 +3,15 @@ from ast import Return
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
- "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","TVALUE","STRING", "SPACE","NEWLINE"]
-
-
-
+ "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","NEWLINE", "DOUBLENEWLINE"]
 
 
 states = [
     ("spacesReader", "inclusive"), #read spaces in this state
-    ("functionReader", "exclusive")
-    
 ]
 
 
 #function Reader
-
-def t_functionReader_UPPERWORD(t):
-    r'[A-Z]+'
-    return(t)
-
-def t_functionReader_RE(t):
-    r'(?:.* return)|.* error'
-    return(t)
-
-def t_functionReader_LEFTBRACKET(t):
-    r'\('
-    return(t)
-
-def t_functionReader_RIGHTBRACKET(t):
-    r'\)'
-    return(t)
-
-def t_functionReader_STRING(t):
-    r'f".*"|"*."'
-    return(t)
-
-def t_functionReader_SQM(t):
-    r'\''
-    return(t)
-
-def t_functionReader_COMMA(t):
-    r'\,'
-    return(t)
-
-def t_functionReader_EXPRESSION(t):
-    r'(?:[a-zA-Z.]+\([a-zA-Z.0-9]*\))|[a-zA-Z.]+'
-    return(t)
-
-
-def t_functionReader_error(t):
-    print(f"Illegal character {t} lexer")
-    t.lexer.skip(1)
-    return(t)
-
-
-    
-t_functionReader_ignore = " \t\n"
 
 
 #spacesReader
@@ -79,8 +32,28 @@ def t_spacesReader_SPACE(t):
 
 #INITIAL
 
-t_ignore = " \t\n"
+t_ignore = " \t"
 
+def t_NEWLINE(t):
+    r'\n'
+    return(t)
+
+def t_DOUBLENEWLINE(t):
+    r'\n\n'
+    return(t)
+
+def t_STRING(t):
+    r'f".*"'
+    return(t)
+
+def t_RE(t):
+    r'(?:.* return)|.* error'
+    return(t)
+
+
+def t_EXPRESSION(t):
+    r'(?:[a-zA-Z.]+\([a-zA-Z.0-9]*\))'
+    return(t)
 
 def t_LEXMARKER(t):
     r'\%\%LEX'
@@ -111,7 +84,7 @@ def t_UPPERWORD(t):
     return(t)
      
 def t_WORD(t):
-    r'\w+'
+    r'[a-zA-Z.]+'
     return(t)
     
 def t_IGNORE(t):
@@ -130,7 +103,6 @@ def t_SLEFTBRACKET(t):
     
 def t_SRIGHTBRACKET(t):
     r'\]'
-    lexer.begin('functionReader')
     return(t)
     
 def t_COMMA(t):
@@ -140,8 +112,7 @@ def t_COMMA(t):
 def t_SQM(t):
     r'\''
     return(t)
-    
-    
+      
 def t_LEFTBRACKET(t):
     r'\('
     return(t)
@@ -151,18 +122,14 @@ def t_RIGHTBRACKET(t):
     return(t)
     
 
-def t_STRING(t):
-    r'f".*"|"*."'
-    return(t)
 
-def t_EXPRESSION(t):
-    r'(?:[a-zA-Z.]+\([a-zA-Z.0-9]*\))|[a-zA-Z.]+'
-    return(t)
+
 
     
 def t_ERROR(t):
     r'error'
     return(t)
+
 
 
 
