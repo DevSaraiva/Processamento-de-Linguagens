@@ -39,6 +39,10 @@ def t_CHARACTERS(t):
     r'"[^"]+"'
     return(t)
 
+# def t_ONLYCHARACTERS(t):
+#     r'\'[^\']+\''
+#     return(t)    
+
 def t_HASHTAGS(t):
     r'\#\#'
     return(t)
@@ -46,7 +50,15 @@ def t_HASHTAGS(t):
 def t_UPPERWORD(t):
     r'[A-Z]+'
     return(t)
-     
+
+def t_RIGHT(t):
+    r'right'
+    return(t)
+
+def t_LEFT(t):
+    r'left'
+    return(t)     
+
 def t_WORD(t):
     r'[a-zA-Z.]+'
     return(t)
@@ -98,13 +110,6 @@ def t_PRECEDENCE(t):
     r'\%precedence'
     return(t)
 
-def t_RIGHT(t):
-    r'right'
-    return(t)
-
-def t_LEFT(t):
-    r'left'
-    return(t)
 
 
 def t_error(t):
