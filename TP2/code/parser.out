@@ -2,12 +2,19 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    PRECEDENCE
     SPACE
+    YACCMARKER
 
 Grammar
 
+<<<<<<< HEAD
 Rule 0     S' -> frase
 Rule 1     frase -> lex yacc
+=======
+Rule 0     S' -> phrase
+Rule 1     phrase -> lex
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
 Rule 2     lex -> LEXMARKER literals ignore tokens functions
 Rule 3     literals -> LITERALS EQUAL CHARACTERS comment
 Rule 4     literals -> <empty>
@@ -50,7 +57,11 @@ LEFT                 : 30
 LEFTBRACKET          : 17 27
 LEXMARKER            : 2
 LITERALS             : 3
+<<<<<<< HEAD
 PRECEDENCE           : 23
+=======
+PRECEDENCE           : 
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
 RE                   : 17
 RIGHT                : 29
 RIGHTBRACKET         : 17 27
@@ -62,22 +73,29 @@ STRING               : 20
 TOKENS               : 11
 UPPERWORD            : 13 14 18 19
 WORD                 : 7 8 19
+<<<<<<< HEAD
 YACCMARKER           : 22
+=======
+YACCMARKER           : 
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
 error                : 
 
 Nonterminals, with rules where they appear
 
 comment              : 3 9 11 17
 content              : 17
-frase                : 0
 function             : 15
 functions            : 2 15
 ignore               : 2
 lex                  : 1
 literals             : 2
+<<<<<<< HEAD
 precedence           : 22
 precedences          : 23 25
 rl                   : 27
+=======
+phrase               : 0
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
 tokenNames           : 11 13
 tokenprecedence      : 25
 tokens               : 2
@@ -88,27 +106,38 @@ Parsing method: LALR
 
 state 0
 
+<<<<<<< HEAD
     (0) S' -> . frase
     (1) frase -> . lex yacc
+=======
+    (0) S' -> . phrase
+    (1) phrase -> . lex
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
     (2) lex -> . LEXMARKER literals ignore tokens functions
 
     LEXMARKER       shift and go to state 3
 
-    frase                          shift and go to state 1
+    phrase                         shift and go to state 1
     lex                            shift and go to state 2
 
 state 1
 
-    (0) S' -> frase .
+    (0) S' -> phrase .
 
 
 
 state 2
 
+<<<<<<< HEAD
     (1) frase -> lex . yacc
     (22) yacc -> . YACCMARKER precedence
 
     YACCMARKER      shift and go to state 5
+=======
+    (1) phrase -> lex .
+
+    $end            reduce using rule 1 (phrase -> lex .)
+>>>>>>> c2b2e85a265fc10c987f88408a3b0b8a313e9c2e
 
     yacc                           shift and go to state 4
 
