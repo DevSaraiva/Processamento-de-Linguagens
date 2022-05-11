@@ -5,29 +5,6 @@ import ply.lex as lex
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
  "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE"]
 
-
-states = [
-    ("spacesReader", "inclusive"), #read spaces in this state
-]
-
-
-
-#spacesReader
-
-t_spacesReader_ignore = "ª"
-
-def t_spacesReader_CHARACTERS(t):
-    r'"[^"]+"'
-    print("de volta")
-    t.lexer.begin("INITIAL")
-    t.lexer.activateSpaces = False
-    return(t)
-
-
-def t_spacesReader_SPACE(t):
-    r'\s'
-    return(t)
-
 #INITIAL
 
 t_ignore = " \t\n"
@@ -56,9 +33,6 @@ def t_LITERALS(t):
     
 def t_EQUAL(t):
     r'='
-    if(t.lexer.activateSpaces == True): 
-        lexer.begin('spacesReader')
-        print('comecei')
     return(t)
 
 def t_CHARACTERS(t):
@@ -79,7 +53,6 @@ def t_WORD(t):
     
 def t_IGNORE(t):
     r'\%ignore'
-    lexer.activateSpaces = True
     return(t)
 
 
@@ -112,12 +85,9 @@ def t_RIGHTBRACKET(t):
     return(t)
     
 
-    
 def t_ERROR(t):
     r'error'
     return(t)
-
-
 
 
 def t_error(t):
@@ -127,4 +97,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-lexer.activateSpaces = False
