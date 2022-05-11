@@ -2,12 +2,14 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    PRECEDENCE
     SPACE
+    YACCMARKER
 
 Grammar
 
-Rule 0     S' -> frase
-Rule 1     frase -> lex
+Rule 0     S' -> phrase
+Rule 1     phrase -> lex
 Rule 2     lex -> LEXMARKER literals ignore tokens functions
 Rule 3     literals -> LITERALS EQUAL CHARACTERS comment
 Rule 4     literals -> <empty>
@@ -40,6 +42,7 @@ IGNORE               : 9
 LEFTBRACKET          : 17
 LEXMARKER            : 2
 LITERALS             : 3
+PRECEDENCE           : 
 RE                   : 17
 RIGHTBRACKET         : 17
 SLEFTBRACKET         : 11
@@ -50,18 +53,19 @@ STRING               : 20
 TOKENS               : 11
 UPPERWORD            : 13 14 18 19
 WORD                 : 7 8 19
+YACCMARKER           : 
 error                : 
 
 Nonterminals, with rules where they appear
 
 comment              : 3 9 11 17
 content              : 17
-frase                : 0
 function             : 15
 functions            : 2 15
 ignore               : 2
 lex                  : 1
 literals             : 2
+phrase               : 0
 tokenNames           : 11 13
 tokens               : 2
 words                : 5 7
@@ -70,26 +74,26 @@ Parsing method: LALR
 
 state 0
 
-    (0) S' -> . frase
-    (1) frase -> . lex
+    (0) S' -> . phrase
+    (1) phrase -> . lex
     (2) lex -> . LEXMARKER literals ignore tokens functions
 
     LEXMARKER       shift and go to state 3
 
-    frase                          shift and go to state 1
+    phrase                         shift and go to state 1
     lex                            shift and go to state 2
 
 state 1
 
-    (0) S' -> frase .
+    (0) S' -> phrase .
 
 
 
 state 2
 
-    (1) frase -> lex .
+    (1) phrase -> lex .
 
-    $end            reduce using rule 1 (frase -> lex .)
+    $end            reduce using rule 1 (phrase -> lex .)
 
 
 state 3

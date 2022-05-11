@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from parser_lex import tokens
 
 def p_phrase(p):
-    "frase : lex " #falta yacc
+    "phrase : lex " #falta yacc
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
@@ -91,11 +91,72 @@ def p_content_characters(p):
     "content : CHARACTERS COMMA EXPRESSION"
     p[0] = (p[1],p[3])
 
-
-
 def p_error(p):
-     print(f"Illegal token yacc'{p}'")
+      print(f"Illegal token yacc'{p}'")
         
+
+#YACC
+
+
+# def p_yacc(p):
+#     "yacc : YACCMARKER precedence vars prods functionsyacc INITYACC parse"
+#     print(p[1])
+
+# def p_precedence(p):
+#      "precedence : PRECEDENCE EQUAL SLEFTBRACKET tokensprecedences SRIGHTBRACKET"
+
+# def p_precedence_empty(p):
+#      "precedence : "
+
+# def p_tokensprecedences(p):
+#      "tokensprecedences : tokenprecedences COMMA tokensprecedences"
+
+# def p_tokensprecedences_unico(p):
+#      " tokensprecedences : tokenprecedence"
+
+# def p_tokenprecedence(p):
+#      "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGTHBRACKET"
+
+# def p_rl_r(p):
+#      "rl : SQM RIGHT SQM"
+
+# def p_rl_l(p):
+#      "rl : SQM LEFT SQM"
+
+
+
+
+# def p_nametokensprec(p):
+#     "nametokensprec : nametokensprec COMMA CHARACTERS"
+#     p[0] = f'{p[1]}, {p[3]}'
+
+# def p_nametokensprec_Empty(p):
+#     "nametokensprec :"
+#     p[0] = ""
+
+# def p_vars(p):
+#     "vars : NAMEVAR EQUAL INITVAR"
+#     p[0] = f'{p[1]} = {3}'
+
+# def p_prods(p):
+#     "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
+#     p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+
+#     # def p_{p[0]}(p):  \n
+#     # \t    "{p[3]}"    \n
+#     # \t    {p[5]}      \n
+
+# def p_functionsyacc(p):
+#     "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
+#     p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
+
+# def p_functionsyacc_Empty(p):
+#     "functionsyacc :"
+#     p[0] = ""
+
+# def p_parse(p):
+#     "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+#     p[0] = f"y.parse({p[3]})"
 
 
 # Build the parser
@@ -110,8 +171,7 @@ input = '''
 [a-zA-Z_][a-zA-Z0-9_]* return('VAR', t.value)
 \d+(\.\d+)? return('NUMBER', float(t.value))
 .   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
-t.lexer.skip(1) )
-
+t.lexer.skip(1))
 '''
 
 

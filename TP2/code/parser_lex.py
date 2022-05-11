@@ -1,7 +1,9 @@
+
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
- "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE"]
+ "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","YACCMARKER","PRECEDENCE"]
+
 
 #INITIAL
 
@@ -85,6 +87,15 @@ def t_RIGHTBRACKET(t):
 
 def t_ERROR(t):
     r'error'
+    return(t)
+
+# yacc 
+def t_YACCMARKER(t):
+    r'\%\%YACC'
+    return(t)
+
+def t_PRECEDENCE(t):
+    r'precedence'
     return(t)
 
 
