@@ -1,16 +1,116 @@
+import os
 import ply.yacc as yacc
 from parser_lex import tokens
+import sys
+import re
 
 def p_phrase(p):
     "phrase : lex " #falta yacc
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
-    print(p[1])
-    print(p[2])
-    print(p[3])
-    print(p[4])
     print(p[5])
+
+    #write imports
+
+    parser.outPutLexer.write('import ply.lex as lex\n\n')
+
+    #write literals
+
+    literals = p[2][0]
+    literalsComment = p[2][1]
+
+    parser.outPutLexer.write('literals = [')
+
+    for index,x in enumerate(literals):
+        if(x != '"'):
+            parser.outPutLexer.write('\'' + x + '\'')
+        if(index != len(literals) -1 and index != 0 and index != len(literals) -2):
+            parser.outPutLexer.write(',')
+
+    parser.outPutLexer.write(']\t\t' + '#' + literalsComment + '\n\n')
+
+    # write ignore
+
+    ignore = p[3][0]
+    ignoreComment = p[3][1]
+    parser.outPutLexer.write('ignore = ' + ignore)
+    if(ignoreComment):
+        parser.outPutLexer.write('#' +'\t\t' + ignoreComment + '\n\n')
+    else:
+        parser.outPutLexer.write('\n\n')
+
+
+    # write tokens
+
+    tokens = p[4][0].split(',')
+    tokensComment = p[4][1]
+
+    parser.outPutLexer.write('tokens = [')
+
+    for index,token in enumerate(tokens):
+    
+        parser.outPutLexer.write('\'' + token + '\'')
+        if(index != len(tokens) -1):
+            parser.outPutLexer.write(',')
+    parser.outPutLexer.write(']')
+
+    if(tokensComment):
+        parser.outPutLexer.write('#' +'\t\t' + tokensComment + '\n\n')
+    else:
+        parser.outPutLexer.write('\n\n\n')
+
+
+    #write functions
+
+    functions = p[5]
+
+    for function in functions:
+        comment = function[2]
+        functionName = function[1][0] #no caso de ser uma função de erro functionName vai conter o print
+        functionRE = function[0].split(' return')
+        functionReturnType = function[1][1] #no caso de ser uma função de erro conterá o tratamento
+
+        if(comment):
+            parser.outPutLexer.write(f"#{comment}")
+
+        if(len(functionRE) != 2):
+            #error case
+            functionRE = function[0].split(' error')
+            parser.outPutLexer.write('def t_error(t):\n\t')
+            parser.outPutLexer.write(f"print({functionName})\n\t")
+            parser.outPutLexer.write(f"{functionReturnType}\n")
+
+        else:
+            #function case
+            
+            parser.outPutLexer.write('def t_' + functionName + '(t):\n\t')
+            parser.outPutLexer.write(f"r'{functionRE[0]}'\n\t")
+            
+            #verify return type
+
+            match = re.search(r'([a-zA-Z]+)\([^\)]*\)(\.[^\)]*\))?', functionReturnType)
+            
+            #modify the return
+            
+            if match:
+                nameModifyFunction = match.group(1)
+                parser.outPutLexer.write(f"t.value = {nameModifyFunction}(t.value)\n\t")
+                 
+            parser.outPutLexer.write('return(t)\n\n')
+
+
+
+
+
+
+    
+
+
+
+
+
+    
 
 def p_literals(p):
     "literals : LITERALS EQUAL CHARACTERS comment"
@@ -53,7 +153,7 @@ def p_tokens_empty(p):
 
 def p_tokenNames(p):
      "tokenNames : tokenNames COMMA SQM UPPERWORD SQM"
-     p[0] = p[1] + ', ' + p[4]
+     p[0] = p[1] + ',' + p[4]
 
 def p_tokenNames_stop(p):
     "tokenNames : SQM UPPERWORD SQM"
@@ -70,8 +170,6 @@ def p_functions_empty(p):
 def p_function(p):
     "function : RE LEFTBRACKET content RIGHTBRACKET comment "
     p[0] = (p[1],p[3],p[5])
-    print(p[1])
-    print(p[0])
 
 
 def p_content_returned(p):
@@ -162,17 +260,17 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
+#Read Input File
 
-input = '''
-%%LEX
-%literals = "+-/*=()" ##singlechar
-%ignore = " \t\n"
-%tokens = [ 'VAR','NUMBER'  ]
-[a-zA-Z_][a-zA-Z0-9_]* return('VAR', t.value)
-\d+(\.\d+)? return('NUMBER', float(t.value))
-.   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
-t.lexer.skip(1))
-'''
+filename = sys.argv[1]
+inputDir = os.getcwd() + '/input/' + filename
+input = open(inputDir, 'r').read()
+
+#Create Output Files
+outputDir = os.getcwd() + '/output/' + filename.replace(".txt","")
+
+parser.outPutLexer = open(outputDir + "-LEXER.py", "w")
+parser.outPutYacc = open(outputDir + "-YACC.py", "w")
 
 
 

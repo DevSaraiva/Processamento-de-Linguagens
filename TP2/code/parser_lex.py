@@ -28,7 +28,6 @@ def t_LEXMARKER(t):
     
 def t_LITERALS(t):
     r'\%literals'
-    lexer.activateSpaces = True
     return(t)
     
 def t_EQUAL(t):
