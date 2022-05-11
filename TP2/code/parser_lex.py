@@ -3,7 +3,7 @@ from ast import Return
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
- "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","YACCMARKER","PRECEDENCE"]
+ "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","YACCMARKER","PRECEDENCE","RIGHT","LEFT"]
 
 
 #INITIAL
@@ -96,7 +96,15 @@ def t_YACCMARKER(t):
     return(t)
 
 def t_PRECEDENCE(t):
-    r'precedence'
+    r'\%precedence'
+    return(t)
+
+def t_RIGHT(t):
+    r'right'
+    return(t)
+
+def t_LEFT(t):
+    r'left'
     return(t)
 
 

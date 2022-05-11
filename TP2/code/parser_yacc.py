@@ -97,19 +97,27 @@ def p_yacc(p):
     print(p[1])
 
 def p_precedence(p):
-     "precedence : PRECEDENCE EQUAL SLEFTBRACKET tokensprecedences SRIGHTBRACKET"
+    "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
+    print(p[1],p[2])
 
 def p_precedence_empty(p):
-     "precedence : "
+    "precedence : "
 
-def p_tokensprecedences(p):
-     "tokensprecedences : tokenprecedences COMMA tokensprecedences"
+def p_precedences_varios(p):
+     "precedences : precedences tokenprecedence"
 
-def p_tokensprecedences_unico(p):
-     " tokensprecedences : tokenprecedence"
+# def p_precedences_unico(p):
+#     "precedences : tokenprecedence COMMA"
+
+
+def p_precedences_vazio(p):
+     "precedences : "
 
 def p_tokenprecedence(p):
-     "tokenprecedence : LEFTBRACKET rl COMMA  RIGTHBRACKET" # nametokensprec
+     "tokenprecedence : LEFTBRACKET rl COMMA RIGHTBRACKET COMMA" # nametokensprec
+
+def p_tokenprecedence_vazio(p):
+     "tokenprecedence : " # nametokensprec
 
 def p_rl_r(p):
      "rl : SQM RIGHT SQM"
@@ -135,13 +143,13 @@ input = '''
 \d+(\.\d+)? return('NUMBER', float(t.value))
 .   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
 t.lexer.skip(1) )
-%%YACC
-%precedence = [
-    ('left','+','-'),
-    ('left','*','/'),
-    ('right','UMINUS'),
-]
-'''
+%%YACC 
+%precedence = [ 
+     ('left',),
+     ('left',),
+     ('right',),
+]'''
+
 
 
 
