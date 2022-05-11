@@ -3,15 +3,13 @@ from ast import Return
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
- "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","NEWLINE", "DOUBLENEWLINE"]
+ "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE"]
 
 
 states = [
     ("spacesReader", "inclusive"), #read spaces in this state
 ]
 
-
-#function Reader
 
 
 #spacesReader
@@ -32,15 +30,7 @@ def t_spacesReader_SPACE(t):
 
 #INITIAL
 
-t_ignore = " \t"
-
-def t_NEWLINE(t):
-    r'\n'
-    return(t)
-
-def t_DOUBLENEWLINE(t):
-    r'\n\n'
-    return(t)
+t_ignore = " \t\n"
 
 def t_STRING(t):
     r'f".*"'
@@ -121,9 +111,6 @@ def t_RIGHTBRACKET(t):
     r'\)'
     return(t)
     
-
-
-
 
     
 def t_ERROR(t):
