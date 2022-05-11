@@ -11,9 +11,9 @@ def p_lex(p):
     print(p[3])
 
 def p_literals(p):
-    "literals : LITERALS EQUAL SPACE CHARACTERS comment"
-    p[0] = repr(p[4])
-    print(p[5])
+    "literals : LITERALS EQUAL CHARACTERS comment"
+    p[0] = repr(p[3])
+    print(p[2])
 
 def p_literals_empty(p):
     "literals : "
@@ -36,8 +36,8 @@ def p_words_stop(p):
     p[0] = p[1]
 
 def p_ignore(p):
-    "ignore : IGNORE EQUAL SPACE CHARACTERS comment"
-    p[0] = repr(p[4])
+    "ignore : IGNORE EQUAL CHARACTERS comment"
+    p[0] = repr(p[3])
 
 def p_ignore_empty(p):
     "ignore : "
