@@ -5,7 +5,7 @@ import sys
 import re
 
 def p_phrase(p):
-    "phrase : lex " #falta yacc
+    "phrase : lex yacc " #falta yacc
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
@@ -101,17 +101,6 @@ def p_lex(p):
 
 
 
-
-
-
-    
-
-
-
-
-
-    
-
 def p_literals(p):
     "literals : LITERALS EQUAL CHARACTERS comment"
     p[0] = ((p[3]),p[4])
@@ -196,65 +185,78 @@ def p_error(p):
 #YACC
 
 
-# def p_yacc(p):
-#     "yacc : YACCMARKER precedence vars prods functionsyacc INITYACC parse"
-#     print(p[1])
+def p_yacc(p):
+    "yacc : YACCMARKER precedence " # vars prods functionsyacc INITYACC parse"
+    print(p[1])
 
-# def p_precedence(p):
-#      "precedence : PRECEDENCE EQUAL SLEFTBRACKET tokensprecedences SRIGHTBRACKET"
+def p_precedence(p):
+    "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
+    print(p[1],p[2],p[3],p[5])
 
-# def p_precedence_empty(p):
-#      "precedence : "
+def p_precedence_empty(p):
+    "precedence : "
 
-# def p_tokensprecedences(p):
-#      "tokensprecedences : tokenprecedences COMMA tokensprecedences"
+def p_precedences_varios(p):
+     "precedences : precedences tokenprecedence"
 
-# def p_tokensprecedences_unico(p):
-#      " tokensprecedences : tokenprecedence"
-
-# def p_tokenprecedence(p):
-#      "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGTHBRACKET"
-
-# def p_rl_r(p):
-#      "rl : SQM RIGHT SQM"
-
-# def p_rl_l(p):
-#      "rl : SQM LEFT SQM"
+# def p_precedences_unico(p):
+#     "precedences : tokenprecedence COMMA"
 
 
+def p_precedences_vazio(p):
+     "precedences : "
+
+def p_tokenprecedence(p):
+     "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" # nametokensprec
+
+def p_tokenprecedence_vazio(p):
+     "tokenprecedence : " # nametokensprec
 
 
-# def p_nametokensprec(p):
-#     "nametokensprec : nametokensprec COMMA CHARACTERS"
-#     p[0] = f'{p[1]}, {p[3]}'
+def p_rl_r(p):
+      "rl : SQM RIGHT SQM"
 
-# def p_nametokensprec_Empty(p):
-#     "nametokensprec :"
-#     p[0] = ""
+def p_rl_l(p):
+      "rl : SQM LEFT SQM"
 
-# def p_vars(p):
-#     "vars : NAMEVAR EQUAL INITVAR"
-#     p[0] = f'{p[1]} = {3}'
+
+
+
+def p_nametokensprec(p):
+    "nametokensprec : nametokensprec COMMA" #  FALTA OS CARACTERS A SEGUIR AO COMMA
+    # p[0] = f'{p[1]}, {p[3]}'
+
+def p_nametokensprec_empty(p):
+    "nametokensprec :"
+    # p[0] = ""
+
+# def p_vars(p): 
+#     "vars : NAMEVAR EQUAL EXPRESSION"
+#     # p[0] = f'{p[1]} = {3}'
+
+# def p_vars_empty(p):
+#     "vars : "
+   
 
 # def p_prods(p):
-#     "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
-#     p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+#      "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
+#      p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
 
-#     # def p_{p[0]}(p):  \n
-#     # \t    "{p[3]}"    \n
-#     # \t    {p[5]}      \n
+#      # def p_{p[0]}(p):  \n
+#      # \t    "{p[3]}"    \n
+#      # \t    {p[5]}      \n
 
 # def p_functionsyacc(p):
-#     "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
-#     p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
+#      "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
+#      p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
 
 # def p_functionsyacc_Empty(p):
-#     "functionsyacc :"
-#     p[0] = ""
+#      "functionsyacc :"
+#      p[0] = ""
 
 # def p_parse(p):
-#     "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
-#     p[0] = f"y.parse({p[3]})"
+#      "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+#      p[0] = f"y.parse({p[3]})"
 
 
 # Build the parser
@@ -271,6 +273,7 @@ outputDir = os.getcwd() + '/output/' + filename.replace(".txt","")
 
 parser.outPutLexer = open(outputDir + "-LEXER.py", "w")
 parser.outPutYacc = open(outputDir + "-YACC.py", "w")
+
 
 
 

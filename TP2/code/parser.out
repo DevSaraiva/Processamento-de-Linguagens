@@ -2,14 +2,24 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    PRECEDENCE
+    COLON
+    DEF
+    EXPGRAM
+    INITVAR
+    INITYACC
+    LEFTCOTTER
+    NAMEFUNC
+    NAMEPROD
+    NAMEVAR
+    PARSEYACC
+    RETURNEDPRODS
+    RIGHTCOTTER
     SPACE
-    YACCMARKER
 
 Grammar
 
 Rule 0     S' -> phrase
-Rule 1     phrase -> lex
+Rule 1     phrase -> lex yacc
 Rule 2     lex -> LEXMARKER literals ignore tokens functions
 Rule 3     literals -> LITERALS EQUAL CHARACTERS comment
 Rule 4     literals -> <empty>
@@ -30,30 +40,55 @@ Rule 18    content -> SQM UPPERWORD SQM COMMA EXPRESSION
 Rule 19    content -> SQM UPPERWORD SQM COMMA WORD
 Rule 20    content -> STRING COMMA EXPRESSION
 Rule 21    content -> CHARACTERS COMMA EXPRESSION
+Rule 22    yacc -> YACCMARKER precedence
+Rule 23    precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET
+Rule 24    precedence -> <empty>
+Rule 25    precedences -> precedences tokenprecedence
+Rule 26    precedences -> <empty>
+Rule 27    tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA
+Rule 28    tokenprecedence -> <empty>
+Rule 29    rl -> SQM RIGHT SQM
+Rule 30    rl -> SQM LEFT SQM
+Rule 31    nametokensprec -> nametokensprec COMMA
+Rule 32    nametokensprec -> <empty>
 
 Terminals, with rules where they appear
 
 CHARACTERS           : 3 9 21
-COMMA                : 13 18 19 20 21
-EQUAL                : 3 9 11
+COLON                : 
+COMMA                : 13 18 19 20 21 27 27 31
+DEF                  : 
+EQUAL                : 3 9 11 23
+EXPGRAM              : 
 EXPRESSION           : 18 20 21
 HASHTAGS             : 5
 IGNORE               : 9
-LEFTBRACKET          : 17
+INITVAR              : 
+INITYACC             : 
+LEFT                 : 30
+LEFTBRACKET          : 17 27
+LEFTCOTTER           : 
 LEXMARKER            : 2
 LITERALS             : 3
-PRECEDENCE           : 
+NAMEFUNC             : 
+NAMEPROD             : 
+NAMEVAR              : 
+PARSEYACC            : 
+PRECEDENCE           : 23
 RE                   : 17
-RIGHTBRACKET         : 17
-SLEFTBRACKET         : 11
+RETURNEDPRODS        : 
+RIGHT                : 29
+RIGHTBRACKET         : 17 27
+RIGHTCOTTER          : 
+SLEFTBRACKET         : 11 23
 SPACE                : 
-SQM                  : 13 13 14 14 18 18 19 19
-SRIGHTBRACKET        : 11
+SQM                  : 13 13 14 14 18 18 19 19 29 29 30 30
+SRIGHTBRACKET        : 11 23
 STRING               : 20
 TOKENS               : 11
 UPPERWORD            : 13 14 18 19
 WORD                 : 7 8 19
-YACCMARKER           : 
+YACCMARKER           : 22
 error                : 
 
 Nonterminals, with rules where they appear
@@ -65,17 +100,23 @@ functions            : 2 15
 ignore               : 2
 lex                  : 1
 literals             : 2
+nametokensprec       : 27 31
 phrase               : 0
+precedence           : 22
+precedences          : 23 25
+rl                   : 27
 tokenNames           : 11 13
+tokenprecedence      : 25
 tokens               : 2
 words                : 5 7
+yacc                 : 1
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . phrase
-    (1) phrase -> . lex
+    (1) phrase -> . lex yacc
     (2) lex -> . LEXMARKER literals ignore tokens functions
 
     LEXMARKER       shift and go to state 3
@@ -91,10 +132,12 @@ state 1
 
 state 2
 
-    (1) phrase -> lex .
+    (1) phrase -> lex . yacc
+    (22) yacc -> . YACCMARKER precedence
 
-    $end            reduce using rule 1 (phrase -> lex .)
+    YACCMARKER      shift and go to state 5
 
+    yacc                           shift and go to state 4
 
 state 3
 
@@ -102,185 +145,252 @@ state 3
     (3) literals -> . LITERALS EQUAL CHARACTERS comment
     (4) literals -> .
 
-    LITERALS        shift and go to state 5
+    LITERALS        shift and go to state 7
     IGNORE          reduce using rule 4 (literals -> .)
     TOKENS          reduce using rule 4 (literals -> .)
     RE              reduce using rule 4 (literals -> .)
-    $end            reduce using rule 4 (literals -> .)
+    YACCMARKER      reduce using rule 4 (literals -> .)
 
-    literals                       shift and go to state 4
+    literals                       shift and go to state 6
 
 state 4
+
+    (1) phrase -> lex yacc .
+
+    $end            reduce using rule 1 (phrase -> lex yacc .)
+
+
+state 5
+
+    (22) yacc -> YACCMARKER . precedence
+    (23) precedence -> . PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET
+    (24) precedence -> .
+
+    PRECEDENCE      shift and go to state 9
+    $end            reduce using rule 24 (precedence -> .)
+
+    precedence                     shift and go to state 8
+
+state 6
 
     (2) lex -> LEXMARKER literals . ignore tokens functions
     (9) ignore -> . IGNORE EQUAL CHARACTERS comment
     (10) ignore -> .
 
-    IGNORE          shift and go to state 7
+    IGNORE          shift and go to state 11
     TOKENS          reduce using rule 10 (ignore -> .)
     RE              reduce using rule 10 (ignore -> .)
-    $end            reduce using rule 10 (ignore -> .)
+    YACCMARKER      reduce using rule 10 (ignore -> .)
 
-    ignore                         shift and go to state 6
+    ignore                         shift and go to state 10
 
-state 5
+state 7
 
     (3) literals -> LITERALS . EQUAL CHARACTERS comment
 
-    EQUAL           shift and go to state 8
+    EQUAL           shift and go to state 12
 
 
-state 6
+state 8
+
+    (22) yacc -> YACCMARKER precedence .
+
+    $end            reduce using rule 22 (yacc -> YACCMARKER precedence .)
+
+
+state 9
+
+    (23) precedence -> PRECEDENCE . EQUAL SLEFTBRACKET precedences SRIGHTBRACKET
+
+    EQUAL           shift and go to state 13
+
+
+state 10
 
     (2) lex -> LEXMARKER literals ignore . tokens functions
     (11) tokens -> . TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
     (12) tokens -> .
 
-    TOKENS          shift and go to state 10
+    TOKENS          shift and go to state 15
     RE              reduce using rule 12 (tokens -> .)
-    $end            reduce using rule 12 (tokens -> .)
+    YACCMARKER      reduce using rule 12 (tokens -> .)
 
-    tokens                         shift and go to state 9
+    tokens                         shift and go to state 14
 
-state 7
+state 11
 
     (9) ignore -> IGNORE . EQUAL CHARACTERS comment
 
-    EQUAL           shift and go to state 11
+    EQUAL           shift and go to state 16
 
 
-state 8
+state 12
 
     (3) literals -> LITERALS EQUAL . CHARACTERS comment
 
-    CHARACTERS      shift and go to state 12
+    CHARACTERS      shift and go to state 17
 
 
-state 9
+state 13
+
+    (23) precedence -> PRECEDENCE EQUAL . SLEFTBRACKET precedences SRIGHTBRACKET
+
+    SLEFTBRACKET    shift and go to state 18
+
+
+state 14
 
     (2) lex -> LEXMARKER literals ignore tokens . functions
     (15) functions -> . functions function
     (16) functions -> .
 
     RE              reduce using rule 16 (functions -> .)
-    $end            reduce using rule 16 (functions -> .)
+    YACCMARKER      reduce using rule 16 (functions -> .)
 
-    functions                      shift and go to state 13
+    functions                      shift and go to state 19
 
-state 10
+state 15
 
     (11) tokens -> TOKENS . EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment
 
-    EQUAL           shift and go to state 14
+    EQUAL           shift and go to state 20
 
 
-state 11
+state 16
 
     (9) ignore -> IGNORE EQUAL . CHARACTERS comment
 
-    CHARACTERS      shift and go to state 15
+    CHARACTERS      shift and go to state 21
 
 
-state 12
+state 17
 
     (3) literals -> LITERALS EQUAL CHARACTERS . comment
     (5) comment -> . HASHTAGS words
     (6) comment -> .
 
-    HASHTAGS        shift and go to state 17
+    HASHTAGS        shift and go to state 23
     IGNORE          reduce using rule 6 (comment -> .)
     TOKENS          reduce using rule 6 (comment -> .)
     RE              reduce using rule 6 (comment -> .)
-    $end            reduce using rule 6 (comment -> .)
+    YACCMARKER      reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 16
+    comment                        shift and go to state 22
 
-state 13
+state 18
+
+    (23) precedence -> PRECEDENCE EQUAL SLEFTBRACKET . precedences SRIGHTBRACKET
+    (25) precedences -> . precedences tokenprecedence
+    (26) precedences -> .
+
+    SRIGHTBRACKET   reduce using rule 26 (precedences -> .)
+    LEFTBRACKET     reduce using rule 26 (precedences -> .)
+
+    precedences                    shift and go to state 24
+
+state 19
 
     (2) lex -> LEXMARKER literals ignore tokens functions .
     (15) functions -> functions . function
     (17) function -> . RE LEFTBRACKET content RIGHTBRACKET comment
 
-    $end            reduce using rule 2 (lex -> LEXMARKER literals ignore tokens functions .)
-    RE              shift and go to state 19
+    YACCMARKER      reduce using rule 2 (lex -> LEXMARKER literals ignore tokens functions .)
+    RE              shift and go to state 26
 
-    function                       shift and go to state 18
+    function                       shift and go to state 25
 
-state 14
+state 20
 
     (11) tokens -> TOKENS EQUAL . SLEFTBRACKET tokenNames SRIGHTBRACKET comment
 
-    SLEFTBRACKET    shift and go to state 20
+    SLEFTBRACKET    shift and go to state 27
 
 
-state 15
+state 21
 
     (9) ignore -> IGNORE EQUAL CHARACTERS . comment
     (5) comment -> . HASHTAGS words
     (6) comment -> .
 
-    HASHTAGS        shift and go to state 17
+    HASHTAGS        shift and go to state 23
     TOKENS          reduce using rule 6 (comment -> .)
     RE              reduce using rule 6 (comment -> .)
-    $end            reduce using rule 6 (comment -> .)
+    YACCMARKER      reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 21
+    comment                        shift and go to state 28
 
-state 16
+state 22
 
     (3) literals -> LITERALS EQUAL CHARACTERS comment .
 
     IGNORE          reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
     TOKENS          reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
     RE              reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
-    $end            reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
+    YACCMARKER      reduce using rule 3 (literals -> LITERALS EQUAL CHARACTERS comment .)
 
 
-state 17
+state 23
 
     (5) comment -> HASHTAGS . words
     (7) words -> . words WORD
     (8) words -> . WORD
 
-    WORD            shift and go to state 23
+    WORD            shift and go to state 30
 
-    words                          shift and go to state 22
+    words                          shift and go to state 29
 
-state 18
+state 24
+
+    (23) precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences . SRIGHTBRACKET
+    (25) precedences -> precedences . tokenprecedence
+    (27) tokenprecedence -> . LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA
+    (28) tokenprecedence -> .
+
+  ! shift/reduce conflict for SRIGHTBRACKET resolved as shift
+  ! shift/reduce conflict for LEFTBRACKET resolved as shift
+    SRIGHTBRACKET   shift and go to state 31
+    LEFTBRACKET     shift and go to state 33
+
+  ! SRIGHTBRACKET   [ reduce using rule 28 (tokenprecedence -> .) ]
+  ! LEFTBRACKET     [ reduce using rule 28 (tokenprecedence -> .) ]
+
+    tokenprecedence                shift and go to state 32
+
+state 25
 
     (15) functions -> functions function .
 
     RE              reduce using rule 15 (functions -> functions function .)
-    $end            reduce using rule 15 (functions -> functions function .)
+    YACCMARKER      reduce using rule 15 (functions -> functions function .)
 
 
-state 19
+state 26
 
     (17) function -> RE . LEFTBRACKET content RIGHTBRACKET comment
 
-    LEFTBRACKET     shift and go to state 24
+    LEFTBRACKET     shift and go to state 34
 
 
-state 20
+state 27
 
     (11) tokens -> TOKENS EQUAL SLEFTBRACKET . tokenNames SRIGHTBRACKET comment
     (13) tokenNames -> . tokenNames COMMA SQM UPPERWORD SQM
     (14) tokenNames -> . SQM UPPERWORD SQM
 
-    SQM             shift and go to state 26
+    SQM             shift and go to state 36
 
-    tokenNames                     shift and go to state 25
+    tokenNames                     shift and go to state 35
 
-state 21
+state 28
 
     (9) ignore -> IGNORE EQUAL CHARACTERS comment .
 
     TOKENS          reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
     RE              reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
-    $end            reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
+    YACCMARKER      reduce using rule 9 (ignore -> IGNORE EQUAL CHARACTERS comment .)
 
 
-state 22
+state 29
 
     (5) comment -> HASHTAGS words .
     (7) words -> words . WORD
@@ -288,11 +398,11 @@ state 22
     IGNORE          reduce using rule 5 (comment -> HASHTAGS words .)
     TOKENS          reduce using rule 5 (comment -> HASHTAGS words .)
     RE              reduce using rule 5 (comment -> HASHTAGS words .)
-    $end            reduce using rule 5 (comment -> HASHTAGS words .)
-    WORD            shift and go to state 27
+    YACCMARKER      reduce using rule 5 (comment -> HASHTAGS words .)
+    WORD            shift and go to state 37
 
 
-state 23
+state 30
 
     (8) words -> WORD .
 
@@ -300,10 +410,35 @@ state 23
     IGNORE          reduce using rule 8 (words -> WORD .)
     TOKENS          reduce using rule 8 (words -> WORD .)
     RE              reduce using rule 8 (words -> WORD .)
-    $end            reduce using rule 8 (words -> WORD .)
+    YACCMARKER      reduce using rule 8 (words -> WORD .)
 
 
-state 24
+state 31
+
+    (23) precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET .
+
+    $end            reduce using rule 23 (precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET .)
+
+
+state 32
+
+    (25) precedences -> precedences tokenprecedence .
+
+    SRIGHTBRACKET   reduce using rule 25 (precedences -> precedences tokenprecedence .)
+    LEFTBRACKET     reduce using rule 25 (precedences -> precedences tokenprecedence .)
+
+
+state 33
+
+    (27) tokenprecedence -> LEFTBRACKET . rl COMMA nametokensprec RIGHTBRACKET COMMA
+    (29) rl -> . SQM RIGHT SQM
+    (30) rl -> . SQM LEFT SQM
+
+    SQM             shift and go to state 39
+
+    rl                             shift and go to state 38
+
+state 34
 
     (17) function -> RE LEFTBRACKET . content RIGHTBRACKET comment
     (18) content -> . SQM UPPERWORD SQM COMMA EXPRESSION
@@ -311,29 +446,29 @@ state 24
     (20) content -> . STRING COMMA EXPRESSION
     (21) content -> . CHARACTERS COMMA EXPRESSION
 
-    SQM             shift and go to state 29
-    STRING          shift and go to state 30
-    CHARACTERS      shift and go to state 31
+    SQM             shift and go to state 41
+    STRING          shift and go to state 42
+    CHARACTERS      shift and go to state 43
 
-    content                        shift and go to state 28
+    content                        shift and go to state 40
 
-state 25
+state 35
 
     (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames . SRIGHTBRACKET comment
     (13) tokenNames -> tokenNames . COMMA SQM UPPERWORD SQM
 
-    SRIGHTBRACKET   shift and go to state 32
-    COMMA           shift and go to state 33
+    SRIGHTBRACKET   shift and go to state 44
+    COMMA           shift and go to state 45
 
 
-state 26
+state 36
 
     (14) tokenNames -> SQM . UPPERWORD SQM
 
-    UPPERWORD       shift and go to state 34
+    UPPERWORD       shift and go to state 46
 
 
-state 27
+state 37
 
     (7) words -> words WORD .
 
@@ -341,114 +476,155 @@ state 27
     IGNORE          reduce using rule 7 (words -> words WORD .)
     TOKENS          reduce using rule 7 (words -> words WORD .)
     RE              reduce using rule 7 (words -> words WORD .)
-    $end            reduce using rule 7 (words -> words WORD .)
+    YACCMARKER      reduce using rule 7 (words -> words WORD .)
 
 
-state 28
+state 38
+
+    (27) tokenprecedence -> LEFTBRACKET rl . COMMA nametokensprec RIGHTBRACKET COMMA
+
+    COMMA           shift and go to state 47
+
+
+state 39
+
+    (29) rl -> SQM . RIGHT SQM
+    (30) rl -> SQM . LEFT SQM
+
+    RIGHT           shift and go to state 48
+    LEFT            shift and go to state 49
+
+
+state 40
 
     (17) function -> RE LEFTBRACKET content . RIGHTBRACKET comment
 
-    RIGHTBRACKET    shift and go to state 35
+    RIGHTBRACKET    shift and go to state 50
 
 
-state 29
+state 41
 
     (18) content -> SQM . UPPERWORD SQM COMMA EXPRESSION
     (19) content -> SQM . UPPERWORD SQM COMMA WORD
 
-    UPPERWORD       shift and go to state 36
+    UPPERWORD       shift and go to state 51
 
 
-state 30
+state 42
 
     (20) content -> STRING . COMMA EXPRESSION
 
-    COMMA           shift and go to state 37
+    COMMA           shift and go to state 52
 
 
-state 31
+state 43
 
     (21) content -> CHARACTERS . COMMA EXPRESSION
 
-    COMMA           shift and go to state 38
+    COMMA           shift and go to state 53
 
 
-state 32
+state 44
 
     (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET . comment
     (5) comment -> . HASHTAGS words
     (6) comment -> .
 
-    HASHTAGS        shift and go to state 17
+    HASHTAGS        shift and go to state 23
     RE              reduce using rule 6 (comment -> .)
-    $end            reduce using rule 6 (comment -> .)
+    YACCMARKER      reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 39
+    comment                        shift and go to state 54
 
-state 33
+state 45
 
     (13) tokenNames -> tokenNames COMMA . SQM UPPERWORD SQM
 
-    SQM             shift and go to state 40
+    SQM             shift and go to state 55
 
 
-state 34
+state 46
 
     (14) tokenNames -> SQM UPPERWORD . SQM
 
-    SQM             shift and go to state 41
+    SQM             shift and go to state 56
 
 
-state 35
+state 47
+
+    (27) tokenprecedence -> LEFTBRACKET rl COMMA . nametokensprec RIGHTBRACKET COMMA
+    (31) nametokensprec -> . nametokensprec COMMA
+    (32) nametokensprec -> .
+
+    RIGHTBRACKET    reduce using rule 32 (nametokensprec -> .)
+    COMMA           reduce using rule 32 (nametokensprec -> .)
+
+    nametokensprec                 shift and go to state 57
+
+state 48
+
+    (29) rl -> SQM RIGHT . SQM
+
+    SQM             shift and go to state 58
+
+
+state 49
+
+    (30) rl -> SQM LEFT . SQM
+
+    SQM             shift and go to state 59
+
+
+state 50
 
     (17) function -> RE LEFTBRACKET content RIGHTBRACKET . comment
     (5) comment -> . HASHTAGS words
     (6) comment -> .
 
-    HASHTAGS        shift and go to state 17
+    HASHTAGS        shift and go to state 23
     RE              reduce using rule 6 (comment -> .)
-    $end            reduce using rule 6 (comment -> .)
+    YACCMARKER      reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 42
+    comment                        shift and go to state 60
 
-state 36
+state 51
 
     (18) content -> SQM UPPERWORD . SQM COMMA EXPRESSION
     (19) content -> SQM UPPERWORD . SQM COMMA WORD
 
-    SQM             shift and go to state 43
+    SQM             shift and go to state 61
 
 
-state 37
+state 52
 
     (20) content -> STRING COMMA . EXPRESSION
 
-    EXPRESSION      shift and go to state 44
+    EXPRESSION      shift and go to state 62
 
 
-state 38
+state 53
 
     (21) content -> CHARACTERS COMMA . EXPRESSION
 
-    EXPRESSION      shift and go to state 45
+    EXPRESSION      shift and go to state 63
 
 
-state 39
+state 54
 
     (11) tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .
 
     RE              reduce using rule 11 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
-    $end            reduce using rule 11 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
+    YACCMARKER      reduce using rule 11 (tokens -> TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment .)
 
 
-state 40
+state 55
 
     (13) tokenNames -> tokenNames COMMA SQM . UPPERWORD SQM
 
-    UPPERWORD       shift and go to state 46
+    UPPERWORD       shift and go to state 64
 
 
-state 41
+state 56
 
     (14) tokenNames -> SQM UPPERWORD SQM .
 
@@ -456,53 +632,91 @@ state 41
     COMMA           reduce using rule 14 (tokenNames -> SQM UPPERWORD SQM .)
 
 
-state 42
+state 57
+
+    (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec . RIGHTBRACKET COMMA
+    (31) nametokensprec -> nametokensprec . COMMA
+
+    RIGHTBRACKET    shift and go to state 66
+    COMMA           shift and go to state 65
+
+
+state 58
+
+    (29) rl -> SQM RIGHT SQM .
+
+    COMMA           reduce using rule 29 (rl -> SQM RIGHT SQM .)
+
+
+state 59
+
+    (30) rl -> SQM LEFT SQM .
+
+    COMMA           reduce using rule 30 (rl -> SQM LEFT SQM .)
+
+
+state 60
 
     (17) function -> RE LEFTBRACKET content RIGHTBRACKET comment .
 
     RE              reduce using rule 17 (function -> RE LEFTBRACKET content RIGHTBRACKET comment .)
-    $end            reduce using rule 17 (function -> RE LEFTBRACKET content RIGHTBRACKET comment .)
+    YACCMARKER      reduce using rule 17 (function -> RE LEFTBRACKET content RIGHTBRACKET comment .)
 
 
-state 43
+state 61
 
     (18) content -> SQM UPPERWORD SQM . COMMA EXPRESSION
     (19) content -> SQM UPPERWORD SQM . COMMA WORD
 
-    COMMA           shift and go to state 47
+    COMMA           shift and go to state 67
 
 
-state 44
+state 62
 
     (20) content -> STRING COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 20 (content -> STRING COMMA EXPRESSION .)
 
 
-state 45
+state 63
 
     (21) content -> CHARACTERS COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 21 (content -> CHARACTERS COMMA EXPRESSION .)
 
 
-state 46
+state 64
 
     (13) tokenNames -> tokenNames COMMA SQM UPPERWORD . SQM
 
-    SQM             shift and go to state 48
+    SQM             shift and go to state 68
 
 
-state 47
+state 65
+
+    (31) nametokensprec -> nametokensprec COMMA .
+
+    RIGHTBRACKET    reduce using rule 31 (nametokensprec -> nametokensprec COMMA .)
+    COMMA           reduce using rule 31 (nametokensprec -> nametokensprec COMMA .)
+
+
+state 66
+
+    (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET . COMMA
+
+    COMMA           shift and go to state 69
+
+
+state 67
 
     (18) content -> SQM UPPERWORD SQM COMMA . EXPRESSION
     (19) content -> SQM UPPERWORD SQM COMMA . WORD
 
-    EXPRESSION      shift and go to state 49
-    WORD            shift and go to state 50
+    EXPRESSION      shift and go to state 70
+    WORD            shift and go to state 71
 
 
-state 48
+state 68
 
     (13) tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .
 
@@ -510,16 +724,29 @@ state 48
     COMMA           reduce using rule 13 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
 
 
-state 49
+state 69
+
+    (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA .
+
+    SRIGHTBRACKET   reduce using rule 27 (tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA .)
+    LEFTBRACKET     reduce using rule 27 (tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA .)
+
+
+state 70
 
     (18) content -> SQM UPPERWORD SQM COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 18 (content -> SQM UPPERWORD SQM COMMA EXPRESSION .)
 
 
-state 50
+state 71
 
     (19) content -> SQM UPPERWORD SQM COMMA WORD .
 
     RIGHTBRACKET    reduce using rule 19 (content -> SQM UPPERWORD SQM COMMA WORD .)
 
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for SRIGHTBRACKET in state 24 resolved as shift
+WARNING: shift/reduce conflict for LEFTBRACKET in state 24 resolved as shift

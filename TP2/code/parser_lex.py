@@ -1,8 +1,12 @@
 
 import ply.lex as lex
 
-tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", "IGNORE", "TOKENS", "SLEFTBRACKET", "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD",
- "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", "SPACE","YACCMARKER","PRECEDENCE"]
+tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", 
+        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "SRIGHTBRACKET", "COMMA", 
+        "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
+        "SPACE","YACCMARKER", "INITYACC", "PRECEDENCE", "NAMEVAR", "INITVAR", "NAMEPROD", 
+        "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
+        "PARSEYACC"]
 
 
 #INITIAL
@@ -38,6 +42,10 @@ def t_CHARACTERS(t):
     r'"[^"]+"'
     return(t)
 
+# def t_ONLYCHARACTERS(t):
+#     r'\'[^\']+\''
+#     return(t)    
+
 def t_HASHTAGS(t):
     r'\#\#'
     return(t)
@@ -45,7 +53,15 @@ def t_HASHTAGS(t):
 def t_UPPERWORD(t):
     r'[A-Z]+'
     return(t)
-     
+
+def t_RIGHT(t):
+    r'right'
+    return(t)
+
+def t_LEFT(t):
+    r'left'
+    return(t)     
+
 def t_WORD(t):
     r'[a-zA-Z.]+'
     return(t)
@@ -93,9 +109,14 @@ def t_YACCMARKER(t):
     r'\%\%YACC'
     return(t)
 
+def t_INITYACC(t):
+    r'y=yacc()'
+    return t
+
 def t_PRECEDENCE(t):
-    r'precedence'
+    r'\%precedence'
     return(t)
+
 
 
 def t_error(t):
