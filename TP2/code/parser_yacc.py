@@ -109,7 +109,7 @@ def p_literals_empty(p):
     p[0] = "literals vazio"
 
 def p_comment(p):
-    "comment : HASHTAGS words"
+    "comment : HASHTAGS words NEWLINE"
     p[0] = p[2]
     
 
@@ -185,7 +185,7 @@ def p_error(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment " # vars prods functionsyacc INITYACC parse"
+    "yacc : YACCMARKER precedence comment vars" #  prods functionsyacc INITYACC parse"
     print(p[3])
 
 
@@ -205,7 +205,7 @@ def p_precedences_vazio(p):
      "precedences : "
 
 def p_tokenprecedence(p):
-    "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" # nametokensprec
+    "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" 
     print(p[2])
     print(p[4])
 
@@ -222,11 +222,11 @@ def p_rl_l(p):
       p[0] = p[2]
 
 def p_nametokensprec(p):
-    "nametokensprec :  nametokensprec COMMA SQM UPPERWORD SQM" #  FALTA OS CARACTERS A SEGUIR AO COMMA
+    "nametokensprec :  nametokensprec COMMA SQM UPPERWORD SQM" 
     p[0] = p[1] + [p[4]]
 
 def p_nametokensprec_char(p):
-    "nametokensprec : nametokensprec COMMA SQM CHAR SQM" #  FALTA OS CARACTERS A SEGUIR AO COMMA
+    "nametokensprec : nametokensprec COMMA SQM CHAR SQM" 
     p[0] = p[1] + [p[4]]
 
 def p_nametokensprec_char_single(p):
@@ -241,26 +241,18 @@ def p_nametokensprec_upperword_single(p):
 
 
 
-# def p_prods(p):
-#      "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"
-#      p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+def p_vars(p):
+    "vars : WORD EQUAL LEFTCOTTER RIGHTCOTTER"
+    # p[0] = f'{p[1]} = {3}'
 
-#      # def p_{p[0]}(p):  \n
-#      # \t    "{p[3]}"    \n
-#      # \t    {p[5]}      \n
 
-# def p_functionsyacc(p):
-#      "functionsyacc : DEF NAMEFUNC LEFTBRACKET CHARACTERS RIGHTBRACKET COLON"
-#      p[0] = f'{p[1]}{p[2]}{p[3]}{p[4]}{p[5]}{p[6]}'
+def p_vars_empty(p):
+    "vars : "
+   
 
-# def p_functionsyacc_Empty(p):
-#      "functionsyacc :"
-#      p[0] = ""
-
-# def p_parse(p):
-#      "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
-#      p[0] = f"y.parse({p[3]})"
-
+def p_prods(p):
+     "prods : WORD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER"
+     p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
 
 # Build the parser
 parser = yacc.yacc()

@@ -1,7 +1,7 @@
 
 import ply.lex as lex
 
-tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", 
+tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLINE",
         "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "SRIGHTBRACKET", "COMMA", 
         "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
         "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
@@ -9,9 +9,23 @@ tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD",
         "PARSEYACC"]
 
 
+states = [
+    ("newlineReader", "inclusive"),
+]
+
+def t_newlineReader_NEWLINE(t):
+    r'\n'
+    t.lexer.begin('INITIAL')
+    return(t)
+
+
+t_newlineReader_ignore = " \t"
+
 #INITIAL
 
 t_ignore = " \t\n"
+
+
 
 def t_STRING(t):
     r'f".*"'
@@ -48,6 +62,7 @@ def t_CHARACTERS(t):
 
 def t_HASHTAGS(t):
     r'\#\#'
+    t.lexer.begin('newlineReader')
     return(t)
 
 def t_UPPERWORD(t):
@@ -63,7 +78,7 @@ def t_LEFT(t):
     return(t)     
 
 def t_WORD(t):
-    r'[a-zA-Z.:]+|[a-zA-Z.:]+\n'
+    r'[a-zA-Z.:]+'
     return(t)
     
 def t_IGNORE(t):
@@ -97,6 +112,14 @@ def t_LEFTBRACKET(t):
     
 def t_RIGHTBRACKET(t):
     r'\)'
+    return(t)
+
+def t_LEFTCOTTER(t):
+    r'\{'
+    return(t)
+        
+def t_RIGHTCOTTER(t):
+    r'\}'
     return(t)
 
 

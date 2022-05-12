@@ -16,3 +16,5 @@ t.lexer.skip(1))
 ]
 
 ## symboltable : dictionary of variables
+
+ts = { }
