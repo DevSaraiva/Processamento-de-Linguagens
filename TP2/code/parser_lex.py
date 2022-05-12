@@ -63,7 +63,7 @@ def t_LEFT(t):
     return(t)     
 
 def t_WORD(t):
-    r'[a-zA-Z.]+|[a-zA-Z.]+\n'
+    r'[a-zA-Z.:]+|[a-zA-Z.:]+\n'
     return(t)
     
 def t_IGNORE(t):
@@ -98,7 +98,6 @@ def t_LEFTBRACKET(t):
 def t_RIGHTBRACKET(t):
     r'\)'
     return(t)
-
 
 
 def t_ERROR(t):

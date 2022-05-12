@@ -185,7 +185,8 @@ def p_error(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence " # vars prods functionsyacc INITYACC parse"
+    "yacc : YACCMARKER precedence comment " # vars prods functionsyacc INITYACC parse"
+    print(p[3])
 
 
 def p_precedence(p):
@@ -238,13 +239,7 @@ def p_nametokensprec_upperword_single(p):
     p[0] = [p[2]]
     # p[0] = ""
 
-# def p_vars(p): 
-#     "vars : NAMEVAR EQUAL EXPRESSION"
-#     # p[0] = f'{p[1]} = {3}'
 
-# def p_vars_empty(p):
-#     "vars : "
-   
 
 # def p_prods(p):
 #      "prods : NAMEPROD COLON expGram LEFTCOTTER returnedProds RIGHTCOTTER"

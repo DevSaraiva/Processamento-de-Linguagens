@@ -14,3 +14,5 @@ t.lexer.skip(1))
 ('left','*','/'),
 ('right','UMINUS'),
 ]
+
+## symboltable : dictionary of variables
