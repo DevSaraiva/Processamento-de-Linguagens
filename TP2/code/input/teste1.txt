@@ -7,7 +7,6 @@
 .   error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",
 t.lexer.skip(1))
 
-
 %%YACC
 
 %precedence = [
