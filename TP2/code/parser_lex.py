@@ -2,16 +2,41 @@
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLINE",
-        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "SRIGHTBRACKET", "COMMA", 
-        "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
+        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "PRECTAG", "CHARS","SRIGHTBRACKET", "COMMA", 
+        "SQM", "UPPERWORD","LITERAL","RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
         "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
         "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
-        "PARSEYACC"]
+        "PARSEYACC","PERCENTAGE","FUNCTION","BODYFUNCTIONLINE","BODYFUNCTIONFINAL"]
 
 
 states = [
     ("newlineReader", "inclusive"),
+    ("pythonReader" , "exclusive"),
+    ("functionReader","exclusive"),
 ]
+
+
+
+#python reader
+
+def t_pythonReader_CHARS(t):
+    r'[^{}]+'
+    return(t)
+
+
+def t_pythonReader_RIGHTCOTTER(t):
+    r'\}'
+    t.lexer.begin('INITIAL')
+    return(t)
+
+
+t_pythonReader_ignore = " \t\n"
+
+def t_pythonReader_error(t):
+    r'error'
+    return(t)
+
+#NEWLINE READER
 
 def t_newlineReader_NEWLINE(t):
     r'\n'
@@ -19,17 +44,50 @@ def t_newlineReader_NEWLINE(t):
     return(t)
 
 
+
 t_newlineReader_ignore = " \t"
+
+
+#function reader
+
+def t_FUNCTION(t):
+    r'def '
+    t.lexer.begin('functionReader')
+    return(t)
+
+def t_functionReader_BODYFUNCTIONFINAL(t):
+    r'.*\n\n'
+    t.lexer.begin('INITIAL')
+    return(t)
+
+def t_functionReader_BODYFUNCTIONLINE(t):
+    r'.*\n'
+    return(t)
+
+def t_functionReader_error(t):
+    r'error'
+    return(t)
+
+
+t_functionReader_ignore = " \t"
 
 #INITIAL
 
 t_ignore = " \t\n"
 
+def t_INITYACC(t):
+    r'y=yacc\(\)'
+    return t
 
+def t_PARSEYACC(t):
+    r'y.parse'
+    return t
 
 def t_STRING(t):
     r'f".*"'
     return(t)
+
+
 
 def t_RE(t):
     r'(?:.* return)|.* error'
@@ -55,10 +113,6 @@ def t_EQUAL(t):
 def t_CHARACTERS(t):
     r'"[^"]+"'
     return(t)
-
-# def t_ONLYCHARACTERS(t):
-#     r'\'[^']+\''
-#     return(t)    
 
 def t_HASHTAGS(t):
     r'\#\#'
@@ -101,7 +155,7 @@ def t_SRIGHTBRACKET(t):
 def t_COMMA(t):
     r'\,'
     return(t)
-    
+
 def t_SQM(t):
     r'\''
     return(t)
@@ -116,11 +170,14 @@ def t_RIGHTBRACKET(t):
 
 def t_LEFTCOTTER(t):
     r'\{'
+    t.lexer.begin('pythonReader')
     return(t)
         
 def t_RIGHTCOTTER(t):
     r'\}'
     return(t)
+
+
 
 
 def t_ERROR(t):
@@ -132,18 +189,25 @@ def t_YACCMARKER(t):
     r'\%\%YACC'
     return(t)
 
-def t_INITYACC(t):
-    r'y=yacc()'
-    return t
 
 def t_PRECEDENCE(t):
     r'\%precedence'
     return(t)
 
+def t_PRECTAG(t):
+    r'%prec'
+    return(t)
+
+
+def t_PERCENTAGE(t):
+    r'%%\n'
+    # t.lexer.begin('functionsReader')
+    return(t)
+
 def t_CHAR(t):
     r'.'
     return(t)
-    
+
 
 def t_error(t):
     print(f"Illegal character {t} lexer")
