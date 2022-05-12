@@ -192,10 +192,8 @@ def p_yacc(p):
 def p_precedence(p):
     "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
    
-
 def p_precedence_empty(p):
     "precedence : "
-
 
 
 def p_precedences_varios(p):
@@ -208,10 +206,6 @@ def p_tokenprecedence(p):
     "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" 
     print(p[2])
     print(p[4])
-
-def p_tokenprecedence_vazio(p):
-     "tokenprecedence : " 
-     p[0] = []
 
 
 def p_rl_r(p):
