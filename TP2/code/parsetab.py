@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'CHAR CHARACTERS COLON COMMA DEF EQUAL EXPGRAM EXPRESSION HASHTAGS IGNORE INITVAR INITYACC LEFT LEFTBRACKET LEFTCOTTER LEXMARKER LITERALS NAMEFUNC NAMEPROD NAMEVAR NEWLINE PARSEYACC PRECEDENCE RE RETURNEDPRODS RIGHT RIGHTBRACKET RIGHTCOTTER SLEFTBRACKET SQM SRIGHTBRACKET STRING TOKENS UPPERWORD WORD YACCMARKERphrase : lex yacclex : LEXMARKER literals ignore tokens functionsliterals : LITERALS EQUAL CHARACTERS commentliterals : comment : HASHTAGS words NEWLINEcomment : words : words WORDwords : WORDignore : IGNORE EQUAL CHARACTERS commentignore : tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET commenttokens : tokenNames : tokenNames COMMA SQM UPPERWORD SQMtokenNames : SQM UPPERWORD SQMfunctions : functions functionfunctions : function : RE LEFTBRACKET content RIGHTBRACKET comment content : SQM UPPERWORD SQM COMMA EXPRESSIONcontent : SQM UPPERWORD SQM COMMA WORDcontent : STRING COMMA EXPRESSIONcontent : CHARACTERS COMMA EXPRESSIONyacc : YACCMARKER precedence comment varsprecedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKETprecedence : precedences : precedences tokenprecedenceprecedences : tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMArl : SQM RIGHT SQMrl : SQM LEFT SQMnametokensprec :  nametokensprec COMMA SQM UPPERWORD SQMnametokensprec : nametokensprec COMMA SQM CHAR SQMnametokensprec : SQM CHAR SQMnametokensprec : SQM UPPERWORD SQMvars : WORD EQUAL LEFTCOTTER RIGHTCOTTERvars : prods : WORD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER'
+_lr_signature = 'CHAR CHARACTERS CHARS COLON COMMA DEF EQUAL EXPGRAM EXPRESSION HASHTAGS IGNORE INITVAR INITYACC LEFT LEFTBRACKET LEFTCOTTER LEXMARKER LITERAL LITERALS NAMEFUNC NAMEPROD NAMEVAR NEWLINE PARSEYACC PRECEDENCE PRECTAG RE RETURNEDPRODS RIGHT RIGHTBRACKET RIGHTCOTTER SLEFTBRACKET SQM SRIGHTBRACKET STRING TOKENS UPPERWORD WORD YACCMARKERphrase : lex yacclex : LEXMARKER literals ignore tokens functionsliterals : LITERALS EQUAL CHARACTERS commentliterals : comment : HASHTAGS words NEWLINEcomment : words : words WORDwords : WORDignore : IGNORE EQUAL CHARACTERS commentignore : tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET commenttokens : tokenNames : tokenNames COMMA SQM UPPERWORD SQMtokenNames : SQM UPPERWORD SQMfunctions : functions functionfunctions : function : RE LEFTBRACKET content RIGHTBRACKET comment content : SQM UPPERWORD SQM COMMA EXPRESSIONcontent : SQM UPPERWORD SQM COMMA WORDcontent : STRING COMMA EXPRESSIONcontent : CHARACTERS COMMA EXPRESSIONyacc : YACCMARKER precedence comment vars prodsprecedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKETprecedence : precedences : precedences tokenprecedenceprecedences : tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMArl : SQM RIGHT SQMrl : SQM LEFT SQMnametokensprec :  nametokensprec COMMA SQM UPPERWORD SQMnametokensprec : nametokensprec COMMA SQM CHAR SQMnametokensprec : SQM CHAR SQMnametokensprec : SQM UPPERWORD SQMvars : WORD EQUAL LEFTCOTTER RIGHTCOTTERprods : prods prodprods : prod : WORD WORD expProd LEFTCOTTER CHARS RIGHTCOTTERexpProd : expProd UPPERWORDexpProd : expProd WORDexpProd : expProd SQM CHAR SQMexpProd : expProd SQM EQUAL SQMexpProd : expProd SQM LEFTBRACKET SQMexpProd : expProd SQM RIGHTBRACKET SQMexpProd : expProd markerPrecexpProd : markerPrec : PRECTAG UPPERWORD'
     
-_lr_action_items = {'LEXMARKER':([0,],[3,]),'$end':([1,4,5,8,13,20,30,38,44,],[0,-1,-24,-6,-35,-22,-5,-23,-34,]),'YACCMARKER':([2,3,6,10,16,19,25,27,28,30,33,36,51,57,61,68,],[5,-4,-10,-12,-16,-6,-2,-6,-3,-5,-15,-9,-6,-6,-11,-17,]),'LITERALS':([3,],[7,]),'IGNORE':([3,6,19,28,30,],[-4,11,-6,-3,-5,]),'TOKENS':([3,6,10,19,27,28,30,36,],[-4,-10,17,-6,-6,-3,-5,-9,]),'RE':([3,6,10,16,19,25,27,28,30,33,36,51,57,61,68,],[-4,-10,-12,-16,-6,34,-6,-3,-5,-15,-9,-6,-6,-11,-17,]),'PRECEDENCE':([5,],[9,]),'HASHTAGS':([5,8,19,27,38,51,57,],[-24,14,14,14,-23,14,14,]),'WORD':([5,8,13,14,22,23,30,31,38,77,],[-24,-6,21,23,31,-8,-5,-7,-23,84,]),'EQUAL':([7,9,11,17,21,],[12,15,18,26,29,]),'CHARACTERS':([12,18,41,],[19,27,50,]),'SLEFTBRACKET':([15,26,],[24,35,]),'NEWLINE':([22,23,31,],[30,-8,-7,]),'SRIGHTBRACKET':([24,32,39,42,63,78,80,],[-26,38,-25,51,-14,-13,-27,]),'LEFTBRACKET':([24,32,34,39,80,],[-26,40,41,-25,-27,]),'LEFTCOTTER':([29,],[37,]),'SQM':([35,40,41,52,53,54,55,56,58,72,73,75,76,85,86,],[43,46,48,62,63,65,66,67,69,78,79,81,82,87,88,]),'RIGHTCOTTER':([37,],[44,]),'STRING':([41,],[49,]),'COMMA':([42,45,49,50,63,64,66,67,69,74,78,81,82,87,88,],[52,54,59,60,-14,73,-28,-29,77,80,-13,-32,-33,-30,-31,]),'UPPERWORD':([43,48,62,65,79,],[53,58,72,76,85,]),'RIGHT':([46,],[55,]),'LEFT':([46,],[56,]),'RIGHTBRACKET':([47,64,70,71,81,82,83,84,87,88,],[57,74,-20,-21,-32,-33,-18,-19,-30,-31,]),'EXPRESSION':([59,60,77,],[70,71,83,]),'CHAR':([65,79,],[75,86,]),}
+_lr_action_items = {'LEXMARKER':([0,],[3,]),'$end':([1,4,20,29,38,48,96,],[0,-1,-36,-22,-35,-34,-37,]),'YACCMARKER':([2,3,6,10,16,19,25,27,28,31,34,37,55,62,66,79,],[5,-4,-10,-12,-16,-6,-2,-6,-3,-5,-15,-9,-6,-6,-11,-17,]),'LITERALS':([3,],[7,]),'IGNORE':([3,6,19,28,31,],[-4,11,-6,-3,-5,]),'TOKENS':([3,6,10,19,27,28,31,37,],[-4,-10,17,-6,-6,-3,-5,-9,]),'RE':([3,6,10,16,19,25,27,28,31,34,37,55,62,66,79,],[-4,-10,-12,-16,-6,35,-6,-3,-5,-15,-9,-6,-6,-11,-17,]),'PRECEDENCE':([5,],[9,]),'HASHTAGS':([5,8,19,27,41,55,62,],[-24,14,14,14,-23,14,14,]),'WORD':([5,8,13,14,20,22,23,29,31,32,38,39,41,47,48,58,69,71,73,89,94,96,97,98,99,100,],[-24,-6,21,23,-36,32,-8,39,-5,-7,-35,47,-23,-45,-34,69,-39,-38,-44,-46,106,-37,-40,-41,-42,-43,]),'EQUAL':([7,9,11,17,21,72,],[12,15,18,26,30,86,]),'CHARACTERS':([12,18,44,],[19,27,54,]),'SLEFTBRACKET':([15,26,],[24,36,]),'NEWLINE':([22,23,32,],[31,-8,-7,]),'SRIGHTBRACKET':([24,33,42,45,68,95,102,],[-26,41,-25,55,-14,-13,-27,]),'LEFTBRACKET':([24,33,35,42,72,102,],[-26,43,44,-25,87,-27,]),'LEFTCOTTER':([30,47,58,69,71,73,89,97,98,99,100,],[40,-45,70,-39,-38,-44,-46,-40,-41,-42,-43,]),'SQM':([36,43,44,47,56,57,58,59,60,61,63,69,71,73,83,85,86,87,88,89,90,92,93,97,98,99,100,107,108,],[46,50,52,-45,67,68,72,76,77,78,80,-39,-38,-44,95,97,98,99,100,-46,101,103,104,-40,-41,-42,-43,109,110,]),'RIGHTCOTTER':([40,84,],[48,96,]),'STRING':([44,],[53,]),'COMMA':([45,49,53,54,68,75,77,78,80,91,95,103,104,109,110,],[56,59,64,65,-14,90,-28,-29,94,102,-13,-32,-33,-30,-31,]),'UPPERWORD':([46,47,52,58,67,69,71,73,74,76,89,97,98,99,100,101,],[57,-45,63,71,83,-39,-38,-44,89,93,-46,-40,-41,-42,-43,107,]),'PRECTAG':([47,58,69,71,73,89,97,98,99,100,],[-45,74,-39,-38,-44,-46,-40,-41,-42,-43,]),'RIGHT':([50,],[60,]),'LEFT':([50,],[61,]),'RIGHTBRACKET':([51,72,75,81,82,103,104,105,106,109,110,],[62,88,91,-20,-21,-32,-33,-18,-19,-30,-31,]),'EXPRESSION':([64,65,94,],[81,82,105,]),'CHARS':([70,],[84,]),'CHAR':([72,76,101,],[85,92,108,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'phrase':([0,],[1,]),'lex':([0,],[2,]),'yacc':([2,],[4,]),'literals':([3,],[6,]),'precedence':([5,],[8,]),'ignore':([6,],[10,]),'comment':([8,19,27,51,57,],[13,28,36,61,68,]),'tokens':([10,],[16,]),'vars':([13,],[20,]),'words':([14,],[22,]),'functions':([16,],[25,]),'precedences':([24,],[32,]),'function':([25,],[33,]),'tokenprecedence':([32,],[39,]),'tokenNames':([35,],[42,]),'rl':([40,],[45,]),'content':([41,],[47,]),'nametokensprec':([54,],[64,]),}
+_lr_goto_items = {'phrase':([0,],[1,]),'lex':([0,],[2,]),'yacc':([2,],[4,]),'literals':([3,],[6,]),'precedence':([5,],[8,]),'ignore':([6,],[10,]),'comment':([8,19,27,55,62,],[13,28,37,66,79,]),'tokens':([10,],[16,]),'vars':([13,],[20,]),'words':([14,],[22,]),'functions':([16,],[25,]),'prods':([20,],[29,]),'precedences':([24,],[33,]),'function':([25,],[34,]),'prod':([29,],[38,]),'tokenprecedence':([33,],[42,]),'tokenNames':([36,],[45,]),'rl':([43,],[49,]),'content':([44,],[51,]),'expProd':([47,],[58,]),'markerPrec':([58,],[73,]),'nametokensprec':([59,],[75,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -48,19 +48,29 @@ _lr_productions = [
   ('content -> SQM UPPERWORD SQM COMMA WORD','content',5,'p_content_returnedWord','parser_yacc.py',168),
   ('content -> STRING COMMA EXPRESSION','content',3,'p_content_string','parser_yacc.py',172),
   ('content -> CHARACTERS COMMA EXPRESSION','content',3,'p_content_characters','parser_yacc.py',177),
-  ('yacc -> YACCMARKER precedence comment vars','yacc',4,'p_yacc','parser_yacc.py',188),
-  ('precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET','precedence',5,'p_precedence','parser_yacc.py',193),
-  ('precedence -> <empty>','precedence',0,'p_precedence_empty','parser_yacc.py',196),
-  ('precedences -> precedences tokenprecedence','precedences',2,'p_precedences_varios','parser_yacc.py',200),
-  ('precedences -> <empty>','precedences',0,'p_precedences_vazio','parser_yacc.py',203),
-  ('tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA','tokenprecedence',6,'p_tokenprecedence','parser_yacc.py',206),
-  ('rl -> SQM RIGHT SQM','rl',3,'p_rl_r','parser_yacc.py',212),
-  ('rl -> SQM LEFT SQM','rl',3,'p_rl_l','parser_yacc.py',215),
-  ('nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM','nametokensprec',5,'p_nametokensprec','parser_yacc.py',219),
-  ('nametokensprec -> nametokensprec COMMA SQM CHAR SQM','nametokensprec',5,'p_nametokensprec_char','parser_yacc.py',223),
-  ('nametokensprec -> SQM CHAR SQM','nametokensprec',3,'p_nametokensprec_char_single','parser_yacc.py',227),
-  ('nametokensprec -> SQM UPPERWORD SQM','nametokensprec',3,'p_nametokensprec_upperword_single','parser_yacc.py',232),
-  ('vars -> WORD EQUAL LEFTCOTTER RIGHTCOTTER','vars',4,'p_vars','parser_yacc.py',239),
-  ('vars -> <empty>','vars',0,'p_vars_empty','parser_yacc.py',244),
-  ('prods -> WORD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER','prods',6,'p_prods','parser_yacc.py',248),
+  ('yacc -> YACCMARKER precedence comment vars prods','yacc',5,'p_yacc','parser_yacc.py',185),
+  ('precedence -> PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET','precedence',5,'p_precedence','parser_yacc.py',190),
+  ('precedence -> <empty>','precedence',0,'p_precedence_empty','parser_yacc.py',193),
+  ('precedences -> precedences tokenprecedence','precedences',2,'p_precedences_varios','parser_yacc.py',197),
+  ('precedences -> <empty>','precedences',0,'p_precedences_vazio','parser_yacc.py',200),
+  ('tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA','tokenprecedence',6,'p_tokenprecedence','parser_yacc.py',203),
+  ('rl -> SQM RIGHT SQM','rl',3,'p_rl_r','parser_yacc.py',209),
+  ('rl -> SQM LEFT SQM','rl',3,'p_rl_l','parser_yacc.py',212),
+  ('nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM','nametokensprec',5,'p_nametokensprec','parser_yacc.py',216),
+  ('nametokensprec -> nametokensprec COMMA SQM CHAR SQM','nametokensprec',5,'p_nametokensprec_char','parser_yacc.py',220),
+  ('nametokensprec -> SQM CHAR SQM','nametokensprec',3,'p_nametokensprec_char_single','parser_yacc.py',224),
+  ('nametokensprec -> SQM UPPERWORD SQM','nametokensprec',3,'p_nametokensprec_upperword_single','parser_yacc.py',229),
+  ('vars -> WORD EQUAL LEFTCOTTER RIGHTCOTTER','vars',4,'p_vars','parser_yacc.py',236),
+  ('prods -> prods prod','prods',2,'p_prods','parser_yacc.py',242),
+  ('prods -> <empty>','prods',0,'p_prods_empty','parser_yacc.py',245),
+  ('prod -> WORD WORD expProd LEFTCOTTER CHARS RIGHTCOTTER','prod',6,'p_prod','parser_yacc.py',248),
+  ('expProd -> expProd UPPERWORD','expProd',2,'p_expProd_token','parser_yacc.py',255),
+  ('expProd -> expProd WORD','expProd',2,'p_expProd_terminal','parser_yacc.py',259),
+  ('expProd -> expProd SQM CHAR SQM','expProd',4,'p_expProd_terminalLiteral','parser_yacc.py',263),
+  ('expProd -> expProd SQM EQUAL SQM','expProd',4,'p_expProd_terminalEqual','parser_yacc.py',267),
+  ('expProd -> expProd SQM LEFTBRACKET SQM','expProd',4,'p_expProd_leftbracket','parser_yacc.py',271),
+  ('expProd -> expProd SQM RIGHTBRACKET SQM','expProd',4,'p_expProd_rightbracket','parser_yacc.py',275),
+  ('expProd -> expProd markerPrec','expProd',2,'p_expProd_markerPrec','parser_yacc.py',280),
+  ('expProd -> <empty>','expProd',0,'p_expProd_vazio','parser_yacc.py',284),
+  ('markerPrec -> PRECTAG UPPERWORD','markerPrec',2,'p_markerPrec','parser_yacc.py',288),
 ]

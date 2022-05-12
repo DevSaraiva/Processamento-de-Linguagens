@@ -177,15 +177,12 @@ def p_content_characters(p):
     "content : CHARACTERS COMMA EXPRESSION"
     p[0] = (p[1],p[3])
 
-def p_error(p):
-      print(f"Illegal token yacc'{p}'")
-        
 
 #YACC
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment vars" #  prods functionsyacc INITYACC parse"
+    "yacc : YACCMARKER precedence comment vars prods" #  prods functionsyacc INITYACC parse"
     print(p[3])
 
 
@@ -240,13 +237,62 @@ def p_vars(p):
     # p[0] = f'{p[1]} = {3}'
 
 
-def p_vars_empty(p):
-    "vars : "
-   
 
 def p_prods(p):
-     "prods : WORD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER"
-     p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+    "prods : prods prod"
+
+def p_prods_empty(p):
+    "prods : "
+    
+def p_prod(p):
+    "prod : WORD WORD expProd LEFTCOTTER CHARS RIGHTCOTTER"
+    p[0] = (p[1],p[3],p[5])
+    print(p[0])
+
+
+def p_expProd_token(p):
+    "expProd : expProd UPPERWORD"
+    p[0] = p[1] + ' ' + p[2]
+
+def p_expProd_terminal(p):
+    "expProd : expProd WORD"
+    p[0] = p[1] + ' ' + p[2]
+
+def p_expProd_terminalLiteral(p):
+    "expProd : expProd SQM CHAR SQM"
+    p[0] = p[1] + ' ' + p[3]
+
+def p_expProd_terminalEqual(p):
+    "expProd : expProd SQM EQUAL SQM"
+    p[0] = p[1] + ' '+ p[3]
+
+def p_expProd_leftbracket(p):
+    "expProd : expProd SQM LEFTBRACKET SQM"
+    p[0] = p[1] + ' ' + p[3]
+
+def p_expProd_rightbracket(p):
+    "expProd : expProd SQM RIGHTBRACKET SQM"
+    p[0] = p[1] + ' ' + p[3]
+
+
+def p_expProd_markerPrec(p):
+    "expProd : expProd markerPrec"
+    p[0] = p[1] + ' ' +  p[2]
+
+def p_expProd_vazio(p):
+    "expProd : "
+    p[0] = ""
+
+def p_markerPrec(p):
+    "markerPrec : PRECTAG UPPERWORD"
+    p[0] = p[2]
+
+
+
+def p_error(p):
+      print(f"Illegal token yacc'{p}'")
+        
+
 
 # Build the parser
 parser = yacc.yacc()

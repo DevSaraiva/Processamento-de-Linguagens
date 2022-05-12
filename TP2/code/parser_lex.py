@@ -2,8 +2,8 @@
 import ply.lex as lex
 
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLINE",
-        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "SRIGHTBRACKET", "COMMA", 
-        "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
+        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "PRECTAG", "CHARS","SRIGHTBRACKET", "COMMA", 
+        "SQM", "UPPERWORD","LITERAL","RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
         "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
         "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
         "PARSEYACC"]
@@ -11,6 +11,7 @@ tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLI
 
 states = [
     ("newlineReader", "inclusive"),
+    ("pythonReader" , "exclusive")
 ]
 
 def t_newlineReader_NEWLINE(t):
@@ -18,6 +19,25 @@ def t_newlineReader_NEWLINE(t):
     t.lexer.begin('INITIAL')
     return(t)
 
+
+#python reader
+
+def t_pythonReader_CHARS(t):
+    r'[^{}]+'
+    return(t)
+
+
+def t_pythonReader_RIGHTCOTTER(t):
+    r'\}'
+    t.lexer.begin('INITIAL')
+    return(t)
+
+
+t_pythonReader_ignore = " \t\n"
+
+def t_pythonReader_error(t):
+    r'error'
+    return(t)
 
 t_newlineReader_ignore = " \t"
 
@@ -30,6 +50,8 @@ t_ignore = " \t\n"
 def t_STRING(t):
     r'f".*"'
     return(t)
+
+
 
 def t_RE(t):
     r'(?:.* return)|.* error'
@@ -55,10 +77,6 @@ def t_EQUAL(t):
 def t_CHARACTERS(t):
     r'"[^"]+"'
     return(t)
-
-# def t_ONLYCHARACTERS(t):
-#     r'\'[^']+\''
-#     return(t)    
 
 def t_HASHTAGS(t):
     r'\#\#'
@@ -101,7 +119,7 @@ def t_SRIGHTBRACKET(t):
 def t_COMMA(t):
     r'\,'
     return(t)
-    
+
 def t_SQM(t):
     r'\''
     return(t)
@@ -116,11 +134,14 @@ def t_RIGHTBRACKET(t):
 
 def t_LEFTCOTTER(t):
     r'\{'
+    t.lexer.begin('pythonReader')
     return(t)
         
 def t_RIGHTCOTTER(t):
     r'\}'
     return(t)
+
+
 
 
 def t_ERROR(t):
@@ -140,10 +161,15 @@ def t_PRECEDENCE(t):
     r'\%precedence'
     return(t)
 
+def t_PRECTAG(t):
+    r'%prec'
+    return(t)
+
+
 def t_CHAR(t):
     r'.'
     return(t)
-    
+
 
 def t_error(t):
     print(f"Illegal character {t} lexer")
