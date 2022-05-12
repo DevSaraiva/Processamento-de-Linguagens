@@ -4,7 +4,7 @@ import ply.lex as lex
 tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD", 
         "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "SRIGHTBRACKET", "COMMA", 
         "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
-        "SPACE","YACCMARKER", "INITYACC", "PRECEDENCE", "NAMEVAR", "INITVAR", "NAMEPROD", 
+        "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
         "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
         "PARSEYACC"]
 
@@ -43,7 +43,7 @@ def t_CHARACTERS(t):
     return(t)
 
 # def t_ONLYCHARACTERS(t):
-#     r'\'[^\']+\''
+#     r'\'[^']+\''
 #     return(t)    
 
 def t_HASHTAGS(t):
@@ -98,7 +98,8 @@ def t_LEFTBRACKET(t):
 def t_RIGHTBRACKET(t):
     r'\)'
     return(t)
-    
+
+
 
 def t_ERROR(t):
     r'error'
@@ -117,7 +118,10 @@ def t_PRECEDENCE(t):
     r'\%precedence'
     return(t)
 
-
+def t_CHAR(t):
+    r'.'
+    return(t)
+    
 
 def t_error(t):
     print(f"Illegal character {t} lexer")

@@ -5,7 +5,7 @@ import sys
 import re
 
 def p_phrase(p):
-    "phrase : lex yacc " #falta yacc
+    "phrase : lex yacc" #falta yacc
 
 def p_lex(p):
     "lex : LEXMARKER literals ignore tokens functions"
@@ -186,47 +186,56 @@ def p_error(p):
 
 def p_yacc(p):
     "yacc : YACCMARKER precedence " # vars prods functionsyacc INITYACC parse"
-    print(p[1])
+
 
 def p_precedence(p):
     "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
-    print(p[1],p[2],p[3],p[5])
+   
 
 def p_precedence_empty(p):
     "precedence : "
 
+
+
 def p_precedences_varios(p):
      "precedences : precedences tokenprecedence"
-
-# def p_precedences_unico(p):
-#     "precedences : tokenprecedence COMMA"
-
 
 def p_precedences_vazio(p):
      "precedences : "
 
 def p_tokenprecedence(p):
-     "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" # nametokensprec
+    "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" # nametokensprec
+    print(p[2])
+    print(p[4])
 
 def p_tokenprecedence_vazio(p):
-     "tokenprecedence : " # nametokensprec
+     "tokenprecedence : " 
+     p[0] = []
 
 
 def p_rl_r(p):
       "rl : SQM RIGHT SQM"
-
+      p[0] = p[2]
 def p_rl_l(p):
       "rl : SQM LEFT SQM"
-
-
-
+      p[0] = p[2]
 
 def p_nametokensprec(p):
-    "nametokensprec : nametokensprec COMMA" #  FALTA OS CARACTERS A SEGUIR AO COMMA
-    # p[0] = f'{p[1]}, {p[3]}'
+    "nametokensprec :  nametokensprec COMMA SQM UPPERWORD SQM" #  FALTA OS CARACTERS A SEGUIR AO COMMA
+    p[0] = p[1] + [p[4]]
 
-def p_nametokensprec_empty(p):
-    "nametokensprec :"
+def p_nametokensprec_char(p):
+    "nametokensprec : nametokensprec COMMA SQM CHAR SQM" #  FALTA OS CARACTERS A SEGUIR AO COMMA
+    p[0] = p[1] + [p[4]]
+
+def p_nametokensprec_char_single(p):
+    "nametokensprec : SQM CHAR SQM"
+    p[0] = [p[2]]
+    # p[0] = ""
+
+def p_nametokensprec_upperword_single(p):
+    "nametokensprec : SQM UPPERWORD SQM"
+    p[0] = [p[2]]
     # p[0] = ""
 
 # def p_vars(p): 

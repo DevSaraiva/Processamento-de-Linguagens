@@ -14,7 +14,6 @@ Unused terminals:
     PARSEYACC
     RETURNEDPRODS
     RIGHTCOTTER
-    SPACE
 
 Grammar
 
@@ -49,14 +48,17 @@ Rule 27    tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET C
 Rule 28    tokenprecedence -> <empty>
 Rule 29    rl -> SQM RIGHT SQM
 Rule 30    rl -> SQM LEFT SQM
-Rule 31    nametokensprec -> nametokensprec COMMA
-Rule 32    nametokensprec -> <empty>
+Rule 31    nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM
+Rule 32    nametokensprec -> nametokensprec COMMA SQM CHAR SQM
+Rule 33    nametokensprec -> SQM CHAR SQM
+Rule 34    nametokensprec -> SQM UPPERWORD SQM
 
 Terminals, with rules where they appear
 
+CHAR                 : 32 33
 CHARACTERS           : 3 9 21
 COLON                : 
-COMMA                : 13 18 19 20 21 27 27 31
+COMMA                : 13 18 19 20 21 27 27 31 32
 DEF                  : 
 EQUAL                : 3 9 11 23
 EXPGRAM              : 
@@ -81,12 +83,11 @@ RIGHT                : 29
 RIGHTBRACKET         : 17 27
 RIGHTCOTTER          : 
 SLEFTBRACKET         : 11 23
-SPACE                : 
-SQM                  : 13 13 14 14 18 18 19 19 29 29 30 30
+SQM                  : 13 13 14 14 18 18 19 19 29 29 30 30 31 31 32 32 33 33 34 34
 SRIGHTBRACKET        : 11 23
 STRING               : 20
 TOKENS               : 11
-UPPERWORD            : 13 14 18 19
+UPPERWORD            : 13 14 18 19 31 34
 WORD                 : 7 8 19
 YACCMARKER           : 22
 error                : 
@@ -100,7 +101,7 @@ functions            : 2 15
 ignore               : 2
 lex                  : 1
 literals             : 2
-nametokensprec       : 27 31
+nametokensprec       : 27 31 32
 phrase               : 0
 precedence           : 22
 precedences          : 23 25
@@ -553,11 +554,12 @@ state 46
 state 47
 
     (27) tokenprecedence -> LEFTBRACKET rl COMMA . nametokensprec RIGHTBRACKET COMMA
-    (31) nametokensprec -> . nametokensprec COMMA
-    (32) nametokensprec -> .
+    (31) nametokensprec -> . nametokensprec COMMA SQM UPPERWORD SQM
+    (32) nametokensprec -> . nametokensprec COMMA SQM CHAR SQM
+    (33) nametokensprec -> . SQM CHAR SQM
+    (34) nametokensprec -> . SQM UPPERWORD SQM
 
-    RIGHTBRACKET    reduce using rule 32 (nametokensprec -> .)
-    COMMA           reduce using rule 32 (nametokensprec -> .)
+    SQM             shift and go to state 58
 
     nametokensprec                 shift and go to state 57
 
@@ -565,14 +567,14 @@ state 48
 
     (29) rl -> SQM RIGHT . SQM
 
-    SQM             shift and go to state 58
+    SQM             shift and go to state 59
 
 
 state 49
 
     (30) rl -> SQM LEFT . SQM
 
-    SQM             shift and go to state 59
+    SQM             shift and go to state 60
 
 
 state 50
@@ -585,28 +587,28 @@ state 50
     RE              reduce using rule 6 (comment -> .)
     YACCMARKER      reduce using rule 6 (comment -> .)
 
-    comment                        shift and go to state 60
+    comment                        shift and go to state 61
 
 state 51
 
     (18) content -> SQM UPPERWORD . SQM COMMA EXPRESSION
     (19) content -> SQM UPPERWORD . SQM COMMA WORD
 
-    SQM             shift and go to state 61
+    SQM             shift and go to state 62
 
 
 state 52
 
     (20) content -> STRING COMMA . EXPRESSION
 
-    EXPRESSION      shift and go to state 62
+    EXPRESSION      shift and go to state 63
 
 
 state 53
 
     (21) content -> CHARACTERS COMMA . EXPRESSION
 
-    EXPRESSION      shift and go to state 63
+    EXPRESSION      shift and go to state 64
 
 
 state 54
@@ -621,7 +623,7 @@ state 55
 
     (13) tokenNames -> tokenNames COMMA SQM . UPPERWORD SQM
 
-    UPPERWORD       shift and go to state 64
+    UPPERWORD       shift and go to state 65
 
 
 state 56
@@ -635,27 +637,37 @@ state 56
 state 57
 
     (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec . RIGHTBRACKET COMMA
-    (31) nametokensprec -> nametokensprec . COMMA
+    (31) nametokensprec -> nametokensprec . COMMA SQM UPPERWORD SQM
+    (32) nametokensprec -> nametokensprec . COMMA SQM CHAR SQM
 
-    RIGHTBRACKET    shift and go to state 66
-    COMMA           shift and go to state 65
+    RIGHTBRACKET    shift and go to state 67
+    COMMA           shift and go to state 66
 
 
 state 58
+
+    (33) nametokensprec -> SQM . CHAR SQM
+    (34) nametokensprec -> SQM . UPPERWORD SQM
+
+    CHAR            shift and go to state 68
+    UPPERWORD       shift and go to state 69
+
+
+state 59
 
     (29) rl -> SQM RIGHT SQM .
 
     COMMA           reduce using rule 29 (rl -> SQM RIGHT SQM .)
 
 
-state 59
+state 60
 
     (30) rl -> SQM LEFT SQM .
 
     COMMA           reduce using rule 30 (rl -> SQM LEFT SQM .)
 
 
-state 60
+state 61
 
     (17) function -> RE LEFTBRACKET content RIGHTBRACKET comment .
 
@@ -663,60 +675,74 @@ state 60
     YACCMARKER      reduce using rule 17 (function -> RE LEFTBRACKET content RIGHTBRACKET comment .)
 
 
-state 61
+state 62
 
     (18) content -> SQM UPPERWORD SQM . COMMA EXPRESSION
     (19) content -> SQM UPPERWORD SQM . COMMA WORD
 
-    COMMA           shift and go to state 67
+    COMMA           shift and go to state 70
 
 
-state 62
+state 63
 
     (20) content -> STRING COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 20 (content -> STRING COMMA EXPRESSION .)
 
 
-state 63
+state 64
 
     (21) content -> CHARACTERS COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 21 (content -> CHARACTERS COMMA EXPRESSION .)
 
 
-state 64
+state 65
 
     (13) tokenNames -> tokenNames COMMA SQM UPPERWORD . SQM
 
-    SQM             shift and go to state 68
-
-
-state 65
-
-    (31) nametokensprec -> nametokensprec COMMA .
-
-    RIGHTBRACKET    reduce using rule 31 (nametokensprec -> nametokensprec COMMA .)
-    COMMA           reduce using rule 31 (nametokensprec -> nametokensprec COMMA .)
+    SQM             shift and go to state 71
 
 
 state 66
 
-    (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET . COMMA
+    (31) nametokensprec -> nametokensprec COMMA . SQM UPPERWORD SQM
+    (32) nametokensprec -> nametokensprec COMMA . SQM CHAR SQM
 
-    COMMA           shift and go to state 69
+    SQM             shift and go to state 72
 
 
 state 67
 
-    (18) content -> SQM UPPERWORD SQM COMMA . EXPRESSION
-    (19) content -> SQM UPPERWORD SQM COMMA . WORD
+    (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET . COMMA
 
-    EXPRESSION      shift and go to state 70
-    WORD            shift and go to state 71
+    COMMA           shift and go to state 73
 
 
 state 68
+
+    (33) nametokensprec -> SQM CHAR . SQM
+
+    SQM             shift and go to state 74
+
+
+state 69
+
+    (34) nametokensprec -> SQM UPPERWORD . SQM
+
+    SQM             shift and go to state 75
+
+
+state 70
+
+    (18) content -> SQM UPPERWORD SQM COMMA . EXPRESSION
+    (19) content -> SQM UPPERWORD SQM COMMA . WORD
+
+    EXPRESSION      shift and go to state 76
+    WORD            shift and go to state 77
+
+
+state 71
 
     (13) tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .
 
@@ -724,7 +750,16 @@ state 68
     COMMA           reduce using rule 13 (tokenNames -> tokenNames COMMA SQM UPPERWORD SQM .)
 
 
-state 69
+state 72
+
+    (31) nametokensprec -> nametokensprec COMMA SQM . UPPERWORD SQM
+    (32) nametokensprec -> nametokensprec COMMA SQM . CHAR SQM
+
+    UPPERWORD       shift and go to state 78
+    CHAR            shift and go to state 79
+
+
+state 73
 
     (27) tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA .
 
@@ -732,18 +767,64 @@ state 69
     LEFTBRACKET     reduce using rule 27 (tokenprecedence -> LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA .)
 
 
-state 70
+state 74
+
+    (33) nametokensprec -> SQM CHAR SQM .
+
+    RIGHTBRACKET    reduce using rule 33 (nametokensprec -> SQM CHAR SQM .)
+    COMMA           reduce using rule 33 (nametokensprec -> SQM CHAR SQM .)
+
+
+state 75
+
+    (34) nametokensprec -> SQM UPPERWORD SQM .
+
+    RIGHTBRACKET    reduce using rule 34 (nametokensprec -> SQM UPPERWORD SQM .)
+    COMMA           reduce using rule 34 (nametokensprec -> SQM UPPERWORD SQM .)
+
+
+state 76
 
     (18) content -> SQM UPPERWORD SQM COMMA EXPRESSION .
 
     RIGHTBRACKET    reduce using rule 18 (content -> SQM UPPERWORD SQM COMMA EXPRESSION .)
 
 
-state 71
+state 77
 
     (19) content -> SQM UPPERWORD SQM COMMA WORD .
 
     RIGHTBRACKET    reduce using rule 19 (content -> SQM UPPERWORD SQM COMMA WORD .)
+
+
+state 78
+
+    (31) nametokensprec -> nametokensprec COMMA SQM UPPERWORD . SQM
+
+    SQM             shift and go to state 80
+
+
+state 79
+
+    (32) nametokensprec -> nametokensprec COMMA SQM CHAR . SQM
+
+    SQM             shift and go to state 81
+
+
+state 80
+
+    (31) nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM .
+
+    RIGHTBRACKET    reduce using rule 31 (nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM .)
+    COMMA           reduce using rule 31 (nametokensprec -> nametokensprec COMMA SQM UPPERWORD SQM .)
+
+
+state 81
+
+    (32) nametokensprec -> nametokensprec COMMA SQM CHAR SQM .
+
+    RIGHTBRACKET    reduce using rule 32 (nametokensprec -> nametokensprec COMMA SQM CHAR SQM .)
+    COMMA           reduce using rule 32 (nametokensprec -> nametokensprec COMMA SQM CHAR SQM .)
 
 WARNING: 
 WARNING: Conflicts:
