@@ -1,0 +1,174 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> Lista
+Rule 1     Lista -> DELIM_ABRIR Lista2
+Rule 2     Lista2 -> LCont DELIM_FECHAR
+Rule 3     Lista2 -> DELIM_FECHAR
+Rule 4     LCont -> NUM LCont2
+Rule 5     LCont -> PAL LCont2
+Rule 6     LCont2 -> SEPARATOR NUM LCont2
+Rule 7     LCont2 -> SEPARATOR PAL LCont2
+Rule 8     LCont2 -> <empty>
+
+Terminals, with rules where they appear
+
+DELIM_ABRIR          : 1
+DELIM_FECHAR         : 2 3
+NUM                  : 4 6
+PAL                  : 5 7
+SEPARATOR            : 6 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+LCont                : 2
+LCont2               : 4 5 6 7
+Lista                : 0
+Lista2               : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Lista
+    (1) Lista -> . DELIM_ABRIR Lista2
+
+    DELIM_ABRIR     shift and go to state 2
+
+    Lista                          shift and go to state 1
+
+state 1
+
+    (0) S' -> Lista .
+
+
+
+state 2
+
+    (1) Lista -> DELIM_ABRIR . Lista2
+    (2) Lista2 -> . LCont DELIM_FECHAR
+    (3) Lista2 -> . DELIM_FECHAR
+    (4) LCont -> . NUM LCont2
+    (5) LCont -> . PAL LCont2
+
+    DELIM_FECHAR    shift and go to state 5
+    NUM             shift and go to state 6
+    PAL             shift and go to state 7
+
+    Lista2                         shift and go to state 3
+    LCont                          shift and go to state 4
+
+state 3
+
+    (1) Lista -> DELIM_ABRIR Lista2 .
+
+    $end            reduce using rule 1 (Lista -> DELIM_ABRIR Lista2 .)
+
+
+state 4
+
+    (2) Lista2 -> LCont . DELIM_FECHAR
+
+    DELIM_FECHAR    shift and go to state 8
+
+
+state 5
+
+    (3) Lista2 -> DELIM_FECHAR .
+
+    $end            reduce using rule 3 (Lista2 -> DELIM_FECHAR .)
+
+
+state 6
+
+    (4) LCont -> NUM . LCont2
+    (6) LCont2 -> . SEPARATOR NUM LCont2
+    (7) LCont2 -> . SEPARATOR PAL LCont2
+    (8) LCont2 -> .
+
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (LCont2 -> .)
+
+    LCont2                         shift and go to state 9
+
+state 7
+
+    (5) LCont -> PAL . LCont2
+    (6) LCont2 -> . SEPARATOR NUM LCont2
+    (7) LCont2 -> . SEPARATOR PAL LCont2
+    (8) LCont2 -> .
+
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (LCont2 -> .)
+
+    LCont2                         shift and go to state 11
+
+state 8
+
+    (2) Lista2 -> LCont DELIM_FECHAR .
+
+    $end            reduce using rule 2 (Lista2 -> LCont DELIM_FECHAR .)
+
+
+state 9
+
+    (4) LCont -> NUM LCont2 .
+
+    DELIM_FECHAR    reduce using rule 4 (LCont -> NUM LCont2 .)
+
+
+state 10
+
+    (6) LCont2 -> SEPARATOR . NUM LCont2
+    (7) LCont2 -> SEPARATOR . PAL LCont2
+
+    NUM             shift and go to state 12
+    PAL             shift and go to state 13
+
+
+state 11
+
+    (5) LCont -> PAL LCont2 .
+
+    DELIM_FECHAR    reduce using rule 5 (LCont -> PAL LCont2 .)
+
+
+state 12
+
+    (6) LCont2 -> SEPARATOR NUM . LCont2
+    (6) LCont2 -> . SEPARATOR NUM LCont2
+    (7) LCont2 -> . SEPARATOR PAL LCont2
+    (8) LCont2 -> .
+
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (LCont2 -> .)
+
+    LCont2                         shift and go to state 14
+
+state 13
+
+    (7) LCont2 -> SEPARATOR PAL . LCont2
+    (6) LCont2 -> . SEPARATOR NUM LCont2
+    (7) LCont2 -> . SEPARATOR PAL LCont2
+    (8) LCont2 -> .
+
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (LCont2 -> .)
+
+    LCont2                         shift and go to state 15
+
+state 14
+
+    (6) LCont2 -> SEPARATOR NUM LCont2 .
+
+    DELIM_FECHAR    reduce using rule 6 (LCont2 -> SEPARATOR NUM LCont2 .)
+
+
+state 15
+
+    (7) LCont2 -> SEPARATOR PAL LCont2 .
+
+    DELIM_FECHAR    reduce using rule 7 (LCont2 -> SEPARATOR PAL LCont2 .)
+
