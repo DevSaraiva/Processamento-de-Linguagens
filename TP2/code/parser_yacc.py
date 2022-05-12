@@ -185,8 +185,8 @@ def p_error(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment vars" #  prods functionsyacc INITYACC parse"
-    print(p[3])
+    "yacc : YACCMARKER precedence comment vars PERCENTAGE functionsyacc INITYACC parse" #  prods functionsyacc INITYACC parse"
+    print(p[7]+"\n"+p[8])
 
 
 def p_precedence(p):
@@ -247,6 +247,29 @@ def p_vars_empty(p):
 def p_prods(p):
      "prods : WORD COLON EXPGRAM LEFTCOTTER RETURNEDPRODS RIGHTCOTTER"
      p[0] = f'def p_{p[0]}(p):\n\t"{p[3]}"\n\t{p[5]}\n'
+
+def p_functionsyacc(p):
+    "functionsyacc : functionsyacc functionyacc"
+    
+def p_functionsyacc_empty(p):
+    "functionsyacc : "
+
+def p_functionyacc(p):
+    "functionyacc : FUNCTION BODYFUNCTIONLINE bodyfunction BODYFUNCTIONFINAL " # bodyfunction BODYFUNCTIONFINAL"
+    print(p[1],p[2],p[3],"\t" + p[4])
+
+def p_bodyfunction(p):
+    "bodyfunction : bodyfunction BODYFUNCTIONLINE"
+    p[0] = p[1] + "\t" + p[2]
+
+def p_bodyfunction_empty(p):
+    "bodyfunction : "
+    p[0] = ""
+
+def p_parse(p):
+    "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    p[0] = p[1] + p[2] + p[3] + p[4]
+
 
 # Build the parser
 parser = yacc.yacc()

@@ -6,11 +6,12 @@ tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLI
         "SQM", "UPPERWORD", "RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
         "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
         "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
-        "PARSEYACC"]
+        "PARSEYACC","PERCENTAGE","FUNCTION","BODYFUNCTIONLINE","BODYFUNCTIONFINAL","PARSEYACC"]
 
 
 states = [
     ("newlineReader", "inclusive"),
+    ("functionReader","exclusive"),
 ]
 
 def t_newlineReader_NEWLINE(t):
@@ -21,11 +22,36 @@ def t_newlineReader_NEWLINE(t):
 
 t_newlineReader_ignore = " \t"
 
+def t_FUNCTION(t):
+    r'def '
+    t.lexer.begin('functionReader')
+    return(t)
+
+def t_functionReader_BODYFUNCTIONFINAL(t):
+    r'.*\n\n'
+    t.lexer.begin('INITIAL')
+    return(t)
+
+def t_functionReader_BODYFUNCTIONLINE(t):
+    r'.*\n'
+    return(t)
+
+
+
+
+t_functionReader_ignore = " \t"
+
 #INITIAL
 
 t_ignore = " \t\n"
 
+def t_INITYACC(t):
+    r'y=yacc\(\)'
+    return t
 
+def t_PARSEYACC(t):
+    r'y.parse'
+    return t
 
 def t_STRING(t):
     r'f".*"'
@@ -132,18 +158,20 @@ def t_YACCMARKER(t):
     r'\%\%YACC'
     return(t)
 
-def t_INITYACC(t):
-    r'y=yacc()'
-    return t
 
 def t_PRECEDENCE(t):
     r'\%precedence'
     return(t)
 
+def t_PERCENTAGE(t):
+    r'%%\n'
+    # t.lexer.begin('functionsReader')
+    return(t)
+
 def t_CHAR(t):
     r'.'
     return(t)
-    
+
 
 def t_error(t):
     print(f"Illegal character {t} lexer")
