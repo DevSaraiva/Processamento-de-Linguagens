@@ -182,8 +182,8 @@ def p_content_characters(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment vars prods" #  prods functionsyacc INITYACC parse"
-    print(p[3])
+    "yacc : YACCMARKER precedence comment vars prods PERCENTAGE functionsyacc INITYACC parse" #  prods functionsyacc INITYACC parse"
+    print(p[8]+"\n"+p[9])
 
 
 def p_precedence(p):
@@ -292,6 +292,29 @@ def p_markerPrec(p):
 def p_error(p):
       print(f"Illegal token yacc'{p}'")
         
+
+
+def p_functionsyacc(p):
+    "functionsyacc : functionsyacc functionyacc"
+    
+def p_functionsyacc_empty(p):
+    "functionsyacc : "
+
+def p_functionyacc(p):
+    "functionyacc : FUNCTION BODYFUNCTIONLINE bodyfunction BODYFUNCTIONFINAL " # bodyfunction BODYFUNCTIONFINAL"
+    print(p[1],p[2],p[3],"\t" + p[4])
+
+def p_bodyfunction(p):
+    "bodyfunction : bodyfunction BODYFUNCTIONLINE"
+    p[0] = p[1] + "\t" + p[2]
+
+def p_bodyfunction_empty(p):
+    "bodyfunction : "
+    p[0] = ""
+
+def p_parse(p):
+    "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    p[0] = p[1] + p[2] + p[3] + p[4]
 
 
 # Build the parser
