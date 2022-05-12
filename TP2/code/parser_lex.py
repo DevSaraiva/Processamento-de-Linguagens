@@ -63,7 +63,7 @@ def t_LEFT(t):
     return(t)     
 
 def t_WORD(t):
-    r'[a-zA-Z.]+'
+    r'[a-zA-Z.]+|[a-zA-Z.]+\n'
     return(t)
     
 def t_IGNORE(t):
