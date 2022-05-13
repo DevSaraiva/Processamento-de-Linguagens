@@ -158,7 +158,7 @@ def t_HASHTAG(t):
 
 
 def t_UPPERWORD(t):
-    r'[A-Z]+'
+    r'[A-Z_]+'
     return(t)
 
 def t_RIGHT(t):
@@ -170,7 +170,7 @@ def t_LEFT(t):
     return(t)     
 
 def t_WORD(t):
-    r'[a-zA-Z.:]+'
+    r'[a-zA-Z.:_]+'
     return(t)
     
 def t_IGNORE(t):
