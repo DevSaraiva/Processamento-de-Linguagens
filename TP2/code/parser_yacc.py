@@ -100,6 +100,10 @@ def p_lex(p):
                  
             parser.outPutLexer.write('return(t)\n\n')
 
+    #write build lex
+
+    parser.outPutLexer.write('\n\nlexer = lex.lex()')
+
 
 
 def p_literals(p):
@@ -327,11 +331,11 @@ def p_expProd_terminalEqual(p):
 
 def p_expProd_leftbracket(p):
     "expProd : expProd SQM LEFTBRACKET SQM"
-    p[0] = p[1] + ' ' + p[3]
+    p[0] = p[1] + ' '+ '\'' + p[3] + '\''
 
 def p_expProd_rightbracket(p):
     "expProd : expProd SQM RIGHTBRACKET SQM"
-    p[0] = p[1] + ' ' + p[3]
+    p[0] = p[1] + ' '+ '\'' + p[3] + '\''
 
 
 def p_expProd_markerPrec(p):
@@ -344,7 +348,7 @@ def p_expProd_vazio(p):
 
 def p_markerPrec(p):
     "markerPrec : PRECTAG UPPERWORD"
-    p[0] = p[2]
+    p[0] = "%prec " + p[2]
 
 
 

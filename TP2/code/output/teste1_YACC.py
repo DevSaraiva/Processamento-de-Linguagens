@@ -32,11 +32,11 @@ def p_exp5(t):
 	t[0] = t[1] / t[3] 
 
 def p_exp6(t):
-	"exp :  '-' exp UMINUS"
+	"exp :  '-' exp %prec UMINUS"
 	t[0] = -t[2] 
 
 def p_exp7(t):
-	"exp :  ( exp )"
+	"exp :  '(' exp ')'"
 	t[0] = t[2] 
 
 def p_exp8(t):
