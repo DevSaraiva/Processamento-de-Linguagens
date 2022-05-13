@@ -76,11 +76,11 @@ t_functionReader_ignore = " \t"
 t_ignore = " \t\n"
 
 def t_INITYACC(t):
-    r'y=yacc\(\)'
+    r'yacc\(\)'
     return t
 
 def t_PARSEYACC(t):
-    r'y.parse'
+    r'parse'
     return t
 
 def t_STRING(t):

@@ -1,5 +1,7 @@
+import enum
 import os
 import ply.yacc as yacc
+from yaml import parse
 from parser_lex import tokens
 import sys
 import re
@@ -182,72 +184,129 @@ def p_content_characters(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment vars prods PERCENTAGE functionsyacc INITYACC parse" #  prods functionsyacc INITYACC parse"
-    print(p[8]+"\n"+p[9])
+    "yacc : YACCMARKER precedence comment vars prods PERCENTAGE functionsyacc inityacc parse" #  prods functionsyacc INITYACC parse"
+
+
+
+    #write imports
+
+    parser.outPutYacc.write('import ply.yacc as yacc\n')
+    lexerName = "from " + filename.replace(".txt","") + "_LEXER" + " import" + " tokens" + '\n\n'
+
+    parser.outPutYacc.write(lexerName)
+
+    # write precedence
+
+    precedence = p[2]
+    parser.outPutYacc.write(precedence + '\n\n')
+
+
+    #comment
+
+    comment = p[3]
+    parser.outPutYacc.write("## " + comment + "\n\n")
+
+
+    # vars
+
+    vars = p[4]
+    parser.outPutYacc.write(vars + "\n\n")
+
+
+    #prods
+
+    prods = p[5]
+
+    for index,prod in enumerate(prods):
+        func = f'def p_{prod[0]}{index}(t):\n\t"{prod[0]} : {prod[1]}"\n\t{prod[2]}\n\n'
+        parser.outPutYacc.write(func)
+
+    # functionsYacc
+    functionsyacc = p[7]
+
+    parser.outPutYacc.write(functionsyacc)
+
+    #INTYACC
+    inityacc = p[8]
+    parser.outPutYacc.write('\n' + inityacc + " = yacc.yacc()" + '\n')
+
+    #parse
+    parse = p[9]
+
+
+    if parse[0].split(".")[0] == inityacc and parse[0].split(".")[1] == "parse" :
+        parser.outPutYacc.write(parse[0] + parse[1] + parse[2] + parse[3])
+    else:
+        print("ERROR! Check your 'parse' function...")
+
+
+
+    
 
 
 def p_precedence(p):
     "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
+    p[0] = "precedence" + p[2] + p[3] + p[4] + p[5]
    
 def p_precedence_empty(p):
     "precedence : "
-
+    p[0] = ""
 
 def p_precedences_varios(p):
-     "precedences : precedences tokenprecedence"
+    "precedences : precedences tokenprecedence"
+    p[0] = p[1] + p[2]
 
 def p_precedences_vazio(p):
      "precedences : "
+     p[0] = ""
 
 def p_tokenprecedence(p):
     "tokenprecedence : LEFTBRACKET rl COMMA nametokensprec RIGHTBRACKET COMMA" 
-    print(p[2])
-    print(p[4])
-
+    p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6]
 
 def p_rl_r(p):
-      "rl : SQM RIGHT SQM"
-      p[0] = p[2]
+    "rl : SQM RIGHT SQM"
+    p[0] = p[1] + p[2] + p[3]
+
 def p_rl_l(p):
-      "rl : SQM LEFT SQM"
-      p[0] = p[2]
+    "rl : SQM LEFT SQM"
+    p[0] = p[1] + p[2] + p[3]
 
 def p_nametokensprec(p):
     "nametokensprec :  nametokensprec COMMA SQM UPPERWORD SQM" 
-    p[0] = p[1] + [p[4]]
+    p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
 
 def p_nametokensprec_char(p):
     "nametokensprec : nametokensprec COMMA SQM CHAR SQM" 
-    p[0] = p[1] + [p[4]]
+    p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
 
 def p_nametokensprec_char_single(p):
     "nametokensprec : SQM CHAR SQM"
-    p[0] = [p[2]]
-    # p[0] = ""
+    p[0] = p[1] + p[2] + p[3]
 
 def p_nametokensprec_upperword_single(p):
     "nametokensprec : SQM UPPERWORD SQM"
-    p[0] = [p[2]]
-    # p[0] = ""
+    p[0] = p[1] + p[2] + p[3]
 
 
 
 def p_vars(p):
-    "vars : WORD EQUAL LEFTCOTTER RIGHTCOTTER"
-    # p[0] = f'{p[1]} = {3}'
+    "vars : WORD EQUAL LEFTCOTTER RIGHTCOTTER"          # falta aqui o que é suposto estar debtro das chavetas
+    p[0] = f'{p[1]} = {3}'
 
 
 
 def p_prods(p):
     "prods : prods prod"
+    p[0] = p[1] + [p[2]]
 
 def p_prods_empty(p):
     "prods : "
+    p[0] = []
     
 def p_prod(p):
     "prod : WORD WORD expProd LEFTCOTTER CHARS RIGHTCOTTER"
     p[0] = (p[1],p[3],p[5])
-    print(p[0])
 
 
 def p_expProd_token(p):
@@ -260,11 +319,11 @@ def p_expProd_terminal(p):
 
 def p_expProd_terminalLiteral(p):
     "expProd : expProd SQM CHAR SQM"
-    p[0] = p[1] + ' ' + p[3]
+    p[0] = p[1] + ' ' + '\'' + p[3]+ '\''
 
 def p_expProd_terminalEqual(p):
     "expProd : expProd SQM EQUAL SQM"
-    p[0] = p[1] + ' '+ p[3]
+    p[0] = p[1] + ' '+ '\'' + p[3] + '\''
 
 def p_expProd_leftbracket(p):
     "expProd : expProd SQM LEFTBRACKET SQM"
@@ -289,20 +348,21 @@ def p_markerPrec(p):
 
 
 
-def p_error(p):
-      print(f"Illegal token yacc'{p}'")
+
         
 
 
 def p_functionsyacc(p):
     "functionsyacc : functionsyacc functionyacc"
+    p[0] = p[1] + p[2]
     
 def p_functionsyacc_empty(p):
     "functionsyacc : "
+    p[0] = ""
 
 def p_functionyacc(p):
     "functionyacc : FUNCTION BODYFUNCTIONLINE bodyfunction BODYFUNCTIONFINAL " # bodyfunction BODYFUNCTIONFINAL"
-    print(p[1],p[2],p[3],"\t" + p[4])
+    p[0] = p[1] + " " + p[2] + p[3] + "\t" + p[4]
 
 def p_bodyfunction(p):
     "bodyfunction : bodyfunction BODYFUNCTIONLINE"
@@ -313,9 +373,20 @@ def p_bodyfunction_empty(p):
     p[0] = ""
 
 def p_parse(p):
-    "parse : PARSEYACC LEFTBRACKET CHARACTERS RIGHTBRACKET"
-    p[0] = p[1] + p[2] + p[3] + p[4]
+    "parse : WORD LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    p[0] = (p[1], p[2], p[3], p[4])
 
+
+def p_inityacc(p):
+    "inityacc : WORD EQUAL INITYACC"
+    p[0] = p[1]
+
+
+
+def p_error(p):
+      print(f"Illegal token yacc'{p}'")
+
+      
 
 # Build the parser
 parser = yacc.yacc()
@@ -329,8 +400,8 @@ input = open(inputDir, 'r').read()
 #Create Output Files
 outputDir = os.getcwd() + '/output/' + filename.replace(".txt","")
 
-parser.outPutLexer = open(outputDir + "-LEXER.py", "w")
-parser.outPutYacc = open(outputDir + "-YACC.py", "w")
+parser.outPutLexer = open(outputDir + "_LEXER.py", "w")
+parser.outPutYacc = open(outputDir + "_YACC.py", "w")
 
 
 
