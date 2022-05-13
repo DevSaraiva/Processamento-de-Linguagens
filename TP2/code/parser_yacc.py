@@ -188,7 +188,7 @@ def p_content_characters(p):
 
 
 def p_yacc(p):
-    "yacc : YACCMARKER precedence comment vars prods PERCENTAGE functionsyacc inityacc parse" #  prods functionsyacc INITYACC parse"
+    "yacc : YACCMARKER precedence vars prods PERCENTAGE functionsyacc inityacc parse"
 
 
 
@@ -205,37 +205,40 @@ def p_yacc(p):
     parser.outPutYacc.write(precedence + '\n\n')
 
 
-    #comment
-
-    comment = p[3]
-    parser.outPutYacc.write("## " + comment + "\n\n")
-
-
-    # vars
-
-    vars = p[4]
-    parser.outPutYacc.write(vars + "\n\n")
-
-
     #prods
 
-    prods = p[5]
+    prods = p[4]
 
     for index,prod in enumerate(prods):
         func = f'def p_{prod[0]}{index}(t):\n\t"{prod[0]} : {prod[1]}"\n\t{prod[2]}\n\n'
         parser.outPutYacc.write(func)
 
     # functionsYacc
-    functionsyacc = p[7]
+    functionsyacc = p[6]
 
     parser.outPutYacc.write(functionsyacc)
 
     #INTYACC
-    inityacc = p[8]
-    parser.outPutYacc.write('\n' + inityacc + " = yacc.yacc()" + '\n')
+    inityacc = p[7]
+    parser.outPutYacc.write('\n' + inityacc + " = yacc.yacc()" + '\n\n')
+
+
+
+    # vars
+
+    vars = p[3][1]
+    comment = p[3][0]
+
+    parser.outPutYacc.write("#" + comment + '\n')
+    
+    for var in vars:
+        parser.outPutYacc.write(p[7] + '.' + var + "\n")
+
+    parser.outPutYacc.write("\n")
+
 
     #parse
-    parse = p[9]
+    parse = p[8]
 
 
     if parse[0].split(".")[0] == inityacc and parse[0].split(".")[1] == "parse" :
@@ -293,10 +296,38 @@ def p_nametokensprec_upperword_single(p):
     p[0] = p[1] + p[2] + p[3]
 
 
+def p_varsdesc(p):
+    "varsdesc : HASHTAG words NEWLINE"
+    p[0] = p[2]
+    
+
 
 def p_vars(p):
-    "vars : WORD EQUAL LEFTCOTTER RIGHTCOTTER"          # falta aqui o que é suposto estar debtro das chavetas
-    p[0] = f'{p[1]} = {3}'
+    "vars : varsdesc varsaux"
+    p[0] = (p[1],p[2])
+
+    
+
+def p_varsaux_empy(p):
+    "varsaux : "
+    p[0] = []
+
+def p_varsaux(p):
+    "varsaux : varsaux var "
+    p[0] = p[1] + [p[2]]
+
+
+
+def p_var(p):
+    "var :  CONTENTVAR changeline"         
+    p[0] = p[1]
+
+def p_changeline(p):
+    "changeline :  NEWLINE"         
+
+def p_changeline2(p):
+    "changeline :  DOUBLENEWLINE"         
+    
 
 
 
@@ -349,11 +380,6 @@ def p_expProd_vazio(p):
 def p_markerPrec(p):
     "markerPrec : PRECTAG UPPERWORD"
     p[0] = "%prec " + p[2]
-
-
-
-
-        
 
 
 def p_functionsyacc(p):

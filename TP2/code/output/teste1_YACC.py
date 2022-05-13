@@ -3,10 +3,6 @@ from teste1_LEXER import tokens
 
 precedence=[('left','+','-'),('left','*','/'),('right','UMINUS'),]
 
-## symboltable : dictionary of variables
-
-ts = 3
-
 def p_stat0(t):
 	"stat :  VAR '=' exp"
 	ts[t[1]] = t[3] 
@@ -56,4 +52,8 @@ def getval(n):
 
 
 ya = yacc.yacc()
+
+#symboltable : dictionary of variables
+ya.ts = { }
+
 ya.parse("3+4*7")

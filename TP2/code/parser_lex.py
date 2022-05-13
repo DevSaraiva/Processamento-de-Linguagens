@@ -1,7 +1,7 @@
 
 import ply.lex as lex
 
-tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAGS", "WORD","NEWLINE",
+tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAG","HASHTAGS", "CONTENTVAR","WORD","NEWLINE","DOUBLENEWLINE",
         "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "PRECTAG", "CHARS","SRIGHTBRACKET", "COMMA", 
         "SQM", "UPPERWORD","LITERAL","RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
         "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
@@ -13,7 +13,34 @@ states = [
     ("newlineReader", "inclusive"),
     ("pythonReader" , "exclusive"),
     ("functionReader","exclusive"),
+    ("varsReader","exclusive")
 ]
+
+
+#vars reader
+
+def t_varsReader_CONTENTVAR(t):
+    r'[^\n]+'
+    return(t)
+
+def t_varsReader_DOUBLENEWLINE(t):
+    r'\n\n'
+    t.lexer.varsReader = False
+    t.lexer.begin('INITIAL')
+    return(t)
+
+
+def t_varsReader_NEWLINE(t):
+    r'\n'
+    return(t)
+
+t_varsReader_ignore = " \t"
+
+def t_varsReader_error(t):
+    r'error'
+    return(t)
+
+
 
 
 
@@ -40,7 +67,11 @@ def t_pythonReader_error(t):
 
 def t_newlineReader_NEWLINE(t):
     r'\n'
-    t.lexer.begin('INITIAL')
+    if(t.lexer.varsReader):
+        t.lexer.begin('varsReader')
+
+    else:
+        t.lexer.begin('INITIAL')
     return(t)
 
 
@@ -118,6 +149,13 @@ def t_HASHTAGS(t):
     r'\#\#'
     t.lexer.begin('newlineReader')
     return(t)
+
+def t_HASHTAG(t):
+    r'\#'
+    t.lexer.begin('newlineReader')
+    t.lexer.varsReader = True
+    return(t)
+
 
 def t_UPPERWORD(t):
     r'[A-Z]+'
@@ -216,3 +254,4 @@ def t_error(t):
 
 
 lexer = lex.lex()
+lexer.varsReader = False
