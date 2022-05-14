@@ -2,394 +2,173 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Grammar
 
-Rule 0     S' -> stat
-Rule 1     stat -> VAR = exp
-Rule 2     stat -> exp
-Rule 3     exp -> exp + exp
-Rule 4     exp -> exp - exp
-Rule 5     exp -> exp * exp
-Rule 6     exp -> exp / exp
-Rule 7     exp -> - exp
-Rule 8     exp -> ( exp )
-Rule 9     exp -> NUMBER
-Rule 10    exp -> VAR
+Rule 0     S' -> lista
+Rule 1     lista -> DELIM_ABRIR listaa
+Rule 2     listaa -> lcont DELIM_FECHAR
+Rule 3     listaa -> DELIM_FECHAR
+Rule 4     lcont -> NUM lcontt
+Rule 5     lcont -> PAL lcontt
+Rule 6     lcontt -> SEPARATOR NUM lcontt
+Rule 7     lcontt -> SEPARATOR PAL lcontt
+Rule 8     lcontt -> <empty>
 
 Terminals, with rules where they appear
 
-(                    : 8
-)                    : 8
-*                    : 5
-+                    : 3
--                    : 4 7
-/                    : 6
-=                    : 1
-NUMBER               : 9
-VAR                  : 1 10
+DELIM_ABRIR          : 1
+DELIM_FECHAR         : 2 3
+NUM                  : 4 6
+PAL                  : 5 7
+SEPARATOR            : 6 7
 error                : 
 
 Nonterminals, with rules where they appear
 
-exp                  : 1 2 3 3 4 4 5 5 6 6 7 8
-stat                 : 0
+lcont                : 2
+lcontt               : 4 5 6 7
+lista                : 0
+listaa               : 1
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . stat
-    (1) stat -> . VAR = exp
-    (2) stat -> . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (0) S' -> . lista
+    (1) lista -> . DELIM_ABRIR listaa
 
-    VAR             shift and go to state 2
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
+    DELIM_ABRIR     shift and go to state 2
 
-    stat                           shift and go to state 1
-    exp                            shift and go to state 3
+    lista                          shift and go to state 1
 
 state 1
 
-    (0) S' -> stat .
+    (0) S' -> lista .
 
 
 
 state 2
 
-    (1) stat -> VAR . = exp
-    (10) exp -> VAR .
+    (1) lista -> DELIM_ABRIR . listaa
+    (2) listaa -> . lcont DELIM_FECHAR
+    (3) listaa -> . DELIM_FECHAR
+    (4) lcont -> . NUM lcontt
+    (5) lcont -> . PAL lcontt
 
-    =               shift and go to state 7
-    +               reduce using rule 10 (exp -> VAR .)
-    -               reduce using rule 10 (exp -> VAR .)
-    *               reduce using rule 10 (exp -> VAR .)
-    /               reduce using rule 10 (exp -> VAR .)
-    $end            reduce using rule 10 (exp -> VAR .)
+    DELIM_FECHAR    shift and go to state 5
+    NUM             shift and go to state 6
+    PAL             shift and go to state 7
 
+    listaa                         shift and go to state 3
+    lcont                          shift and go to state 4
 
 state 3
 
-    (2) stat -> exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
+    (1) lista -> DELIM_ABRIR listaa .
 
-    $end            reduce using rule 2 (stat -> exp .)
-    +               shift and go to state 8
-    -               shift and go to state 9
-    *               shift and go to state 10
-    /               shift and go to state 11
+    $end            reduce using rule 1 (lista -> DELIM_ABRIR listaa .)
 
 
 state 4
 
-    (7) exp -> - . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (2) listaa -> lcont . DELIM_FECHAR
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    DELIM_FECHAR    shift and go to state 8
 
-    exp                            shift and go to state 12
 
 state 5
 
-    (8) exp -> ( . exp )
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (3) listaa -> DELIM_FECHAR .
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    $end            reduce using rule 3 (listaa -> DELIM_FECHAR .)
 
-    exp                            shift and go to state 14
 
 state 6
 
-    (9) exp -> NUMBER .
+    (4) lcont -> NUM . lcontt
+    (6) lcontt -> . SEPARATOR NUM lcontt
+    (7) lcontt -> . SEPARATOR PAL lcontt
+    (8) lcontt -> .
 
-    +               reduce using rule 9 (exp -> NUMBER .)
-    -               reduce using rule 9 (exp -> NUMBER .)
-    *               reduce using rule 9 (exp -> NUMBER .)
-    /               reduce using rule 9 (exp -> NUMBER .)
-    $end            reduce using rule 9 (exp -> NUMBER .)
-    )               reduce using rule 9 (exp -> NUMBER .)
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (lcontt -> .)
 
+    lcontt                         shift and go to state 9
 
 state 7
 
-    (1) stat -> VAR = . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (5) lcont -> PAL . lcontt
+    (6) lcontt -> . SEPARATOR NUM lcontt
+    (7) lcontt -> . SEPARATOR PAL lcontt
+    (8) lcontt -> .
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (lcontt -> .)
 
-    exp                            shift and go to state 15
+    lcontt                         shift and go to state 11
 
 state 8
 
-    (3) exp -> exp + . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (2) listaa -> lcont DELIM_FECHAR .
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    $end            reduce using rule 2 (listaa -> lcont DELIM_FECHAR .)
 
-    exp                            shift and go to state 16
 
 state 9
 
-    (4) exp -> exp - . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (4) lcont -> NUM lcontt .
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    DELIM_FECHAR    reduce using rule 4 (lcont -> NUM lcontt .)
 
-    exp                            shift and go to state 17
 
 state 10
 
-    (5) exp -> exp * . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (6) lcontt -> SEPARATOR . NUM lcontt
+    (7) lcontt -> SEPARATOR . PAL lcontt
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    NUM             shift and go to state 12
+    PAL             shift and go to state 13
 
-    exp                            shift and go to state 18
 
 state 11
 
-    (6) exp -> exp / . exp
-    (3) exp -> . exp + exp
-    (4) exp -> . exp - exp
-    (5) exp -> . exp * exp
-    (6) exp -> . exp / exp
-    (7) exp -> . - exp
-    (8) exp -> . ( exp )
-    (9) exp -> . NUMBER
-    (10) exp -> . VAR
+    (5) lcont -> PAL lcontt .
 
-    -               shift and go to state 4
-    (               shift and go to state 5
-    NUMBER          shift and go to state 6
-    VAR             shift and go to state 13
+    DELIM_FECHAR    reduce using rule 5 (lcont -> PAL lcontt .)
 
-    exp                            shift and go to state 19
 
 state 12
 
-    (7) exp -> - exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
+    (6) lcontt -> SEPARATOR NUM . lcontt
+    (6) lcontt -> . SEPARATOR NUM lcontt
+    (7) lcontt -> . SEPARATOR PAL lcontt
+    (8) lcontt -> .
 
-    +               reduce using rule 7 (exp -> - exp .)
-    -               reduce using rule 7 (exp -> - exp .)
-    *               reduce using rule 7 (exp -> - exp .)
-    /               reduce using rule 7 (exp -> - exp .)
-    $end            reduce using rule 7 (exp -> - exp .)
-    )               reduce using rule 7 (exp -> - exp .)
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (lcontt -> .)
 
-  ! +               [ shift and go to state 8 ]
-  ! -               [ shift and go to state 9 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 11 ]
-
+    lcontt                         shift and go to state 14
 
 state 13
 
-    (10) exp -> VAR .
+    (7) lcontt -> SEPARATOR PAL . lcontt
+    (6) lcontt -> . SEPARATOR NUM lcontt
+    (7) lcontt -> . SEPARATOR PAL lcontt
+    (8) lcontt -> .
 
-    +               reduce using rule 10 (exp -> VAR .)
-    -               reduce using rule 10 (exp -> VAR .)
-    *               reduce using rule 10 (exp -> VAR .)
-    /               reduce using rule 10 (exp -> VAR .)
-    $end            reduce using rule 10 (exp -> VAR .)
-    )               reduce using rule 10 (exp -> VAR .)
+    SEPARATOR       shift and go to state 10
+    DELIM_FECHAR    reduce using rule 8 (lcontt -> .)
 
+    lcontt                         shift and go to state 15
 
 state 14
 
-    (8) exp -> ( exp . )
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
+    (6) lcontt -> SEPARATOR NUM lcontt .
 
-    )               shift and go to state 20
-    +               shift and go to state 8
-    -               shift and go to state 9
-    *               shift and go to state 10
-    /               shift and go to state 11
+    DELIM_FECHAR    reduce using rule 6 (lcontt -> SEPARATOR NUM lcontt .)
 
 
 state 15
 
-    (1) stat -> VAR = exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
+    (7) lcontt -> SEPARATOR PAL lcontt .
 
-    $end            reduce using rule 1 (stat -> VAR = exp .)
-    +               shift and go to state 8
-    -               shift and go to state 9
-    *               shift and go to state 10
-    /               shift and go to state 11
-
-
-state 16
-
-    (3) exp -> exp + exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
-
-    +               reduce using rule 3 (exp -> exp + exp .)
-    -               reduce using rule 3 (exp -> exp + exp .)
-    $end            reduce using rule 3 (exp -> exp + exp .)
-    )               reduce using rule 3 (exp -> exp + exp .)
-    *               shift and go to state 10
-    /               shift and go to state 11
-
-  ! *               [ reduce using rule 3 (exp -> exp + exp .) ]
-  ! /               [ reduce using rule 3 (exp -> exp + exp .) ]
-  ! +               [ shift and go to state 8 ]
-  ! -               [ shift and go to state 9 ]
-
-
-state 17
-
-    (4) exp -> exp - exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
-
-    +               reduce using rule 4 (exp -> exp - exp .)
-    -               reduce using rule 4 (exp -> exp - exp .)
-    $end            reduce using rule 4 (exp -> exp - exp .)
-    )               reduce using rule 4 (exp -> exp - exp .)
-    *               shift and go to state 10
-    /               shift and go to state 11
-
-  ! *               [ reduce using rule 4 (exp -> exp - exp .) ]
-  ! /               [ reduce using rule 4 (exp -> exp - exp .) ]
-  ! +               [ shift and go to state 8 ]
-  ! -               [ shift and go to state 9 ]
-
-
-state 18
-
-    (5) exp -> exp * exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
-
-    +               reduce using rule 5 (exp -> exp * exp .)
-    -               reduce using rule 5 (exp -> exp * exp .)
-    *               reduce using rule 5 (exp -> exp * exp .)
-    /               reduce using rule 5 (exp -> exp * exp .)
-    $end            reduce using rule 5 (exp -> exp * exp .)
-    )               reduce using rule 5 (exp -> exp * exp .)
-
-  ! +               [ shift and go to state 8 ]
-  ! -               [ shift and go to state 9 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 11 ]
-
-
-state 19
-
-    (6) exp -> exp / exp .
-    (3) exp -> exp . + exp
-    (4) exp -> exp . - exp
-    (5) exp -> exp . * exp
-    (6) exp -> exp . / exp
-
-    +               reduce using rule 6 (exp -> exp / exp .)
-    -               reduce using rule 6 (exp -> exp / exp .)
-    *               reduce using rule 6 (exp -> exp / exp .)
-    /               reduce using rule 6 (exp -> exp / exp .)
-    $end            reduce using rule 6 (exp -> exp / exp .)
-    )               reduce using rule 6 (exp -> exp / exp .)
-
-  ! +               [ shift and go to state 8 ]
-  ! -               [ shift and go to state 9 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 11 ]
-
-
-state 20
-
-    (8) exp -> ( exp ) .
-
-    +               reduce using rule 8 (exp -> ( exp ) .)
-    -               reduce using rule 8 (exp -> ( exp ) .)
-    *               reduce using rule 8 (exp -> ( exp ) .)
-    /               reduce using rule 8 (exp -> ( exp ) .)
-    $end            reduce using rule 8 (exp -> ( exp ) .)
-    )               reduce using rule 8 (exp -> ( exp ) .)
+    DELIM_FECHAR    reduce using rule 7 (lcontt -> SEPARATOR PAL lcontt .)
 

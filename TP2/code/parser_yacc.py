@@ -207,10 +207,25 @@ def p_yacc(p):
 
     #prods
 
+    #parsing all vars
+
+    vars = p[3][1]
+
+    for var in vars:
+        parser.yaccVars.append(var.split(' =')[0])
+        
+
+   
+
     prods = p[4]
 
     for index,prod in enumerate(prods):
-        func = f'def p_{prod[0]}{index}(t):\n\t"{prod[0]} : {prod[1]}"\n\t{prod[2]}\n\n'
+        code = prod[2]
+
+        for var in parser.yaccVars:
+            code = re.sub(var,p[7] + '.' + var,code)
+
+        func = f'def p_{prod[0]}{index}(p):\n\t"{prod[0]} : {prod[1]}"\n\t{code}\n\n'
         parser.outPutYacc.write(func)
 
     # functionsYacc
@@ -226,7 +241,7 @@ def p_yacc(p):
 
     # vars
 
-    vars = p[3][1]
+    
     comment = p[3][0]
 
     parser.outPutYacc.write("#" + comment + '\n')
@@ -435,6 +450,8 @@ outputDir = os.getcwd() + '/output/' + filename.replace(".txt","")
 parser.outPutLexer = open(outputDir + "_LEXER.py", "w")
 parser.outPutYacc = open(outputDir + "_YACC.py", "w")
 
+
+parser.yaccVars = []
 
 
 
