@@ -21,6 +21,7 @@ def p_lex(p):
     literals = p[2][0]
     literalsComment = p[2][1]
 
+
     parser.outPutLexer.write('literals = [')
 
     for index,x in enumerate(literals):
@@ -109,6 +110,7 @@ def p_lex(p):
 def p_literals(p):
     "literals : LITERALS EQUAL CHARACTERS comment"
     p[0] = ((p[3]),p[4])
+    parser.literals = p[0][0]
     
 def p_literals_empty(p):
     "literals : "
@@ -302,9 +304,12 @@ def p_nametokensprec_char(p):
     "nametokensprec : nametokensprec COMMA SQM CHAR SQM" 
     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
 
+
 def p_nametokensprec_char_single(p):
     "nametokensprec : SQM CHAR SQM"
     p[0] = p[1] + p[2] + p[3]
+        
+
 
 def p_nametokensprec_upperword_single(p):
     "nametokensprec : SQM UPPERWORD SQM"
@@ -370,23 +375,32 @@ def p_expProd_terminal(p):
 def p_expProd_terminalLiteral(p):
     "expProd : expProd SQM CHAR SQM"
     p[0] = p[1] + ' ' + '\'' + p[3]+ '\''
+    if not p[3] in parser.literals:
+        print(f"Literal {p[3]} Usado Sem ser definido")
 
 def p_expProd_terminalEqual(p):
     "expProd : expProd SQM EQUAL SQM"
     p[0] = p[1] + ' '+ '\'' + p[3] + '\''
+    if not p[3] in parser.literals:
+        print(f"Literal {p[3]} Usado Sem ser definido")
 
 def p_expProd_leftbracket(p):
     "expProd : expProd SQM LEFTBRACKET SQM"
     p[0] = p[1] + ' '+ '\'' + p[3] + '\''
+    if not p[3] in parser.literals:
+        print(f"Literal {p[3]} Usado Sem ser definido")
 
 def p_expProd_rightbracket(p):
     "expProd : expProd SQM RIGHTBRACKET SQM"
     p[0] = p[1] + ' '+ '\'' + p[3] + '\''
+    if not p[3] in parser.literals:
+        print(f"Literal {p[3]} Usado Sem ser definido")
 
 
 def p_expProd_markerPrec(p):
     "expProd : expProd markerPrec"
     p[0] = p[1] + ' ' +  p[2]
+    
 
 def p_expProd_vazio(p):
     "expProd : "

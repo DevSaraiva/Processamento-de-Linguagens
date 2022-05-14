@@ -5,7 +5,7 @@ precedence=[('left','+','-'),('left','*','/'),('right','UMINUS'),]
 
 def p_stat0(p):
 	"stat :  VAR '=' exp"
-	ts[p[1]] = p[3] 
+	ya.ts[p[1]] = p[3] 
 
 def p_stat1(p):
 	"stat :  exp"
@@ -16,7 +16,7 @@ def p_exp2(p):
 	p[0] = p[1] + p[3] 
 
 def p_exp3(p):
-	"exp :  exp '-' exp"
+	"exp :  exp '?' exp"
 	p[0] = p[1] - p[3] 
 
 def p_exp4(p):

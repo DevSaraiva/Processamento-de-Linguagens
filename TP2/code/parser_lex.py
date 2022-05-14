@@ -41,9 +41,6 @@ def t_varsReader_error(t):
     return(t)
 
 
-
-
-
 #python reader
 
 def t_pythonReader_CHARS(t):
@@ -117,7 +114,6 @@ def t_PARSEYACC(t):
 def t_STRING(t):
     r'f".*"'
     return(t)
-
 
 
 def t_RE(t):
