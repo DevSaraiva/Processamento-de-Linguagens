@@ -217,14 +217,6 @@ def t_RIGHTCOTTER(t):
     return(t)
 
 
-
-
-def t_ERROR(t):
-    print(f"Illegal character {t} lexer")
-    t.lexer.skip(1)
-    return(t)
-
-
 # yacc 
 def t_YACCMARKER(t):
     r'\%\%YACC'
