@@ -231,11 +231,24 @@ def p_yacc(p):
 
     for index,prod in enumerate(prods):
         code = prod[2]
+        codeParsed = ""
 
         for var in parser.yaccVars:
             code = re.sub(var,p[7] + '.' + var,code)
 
-        func = f'def p_{prod[0]}{index}(p):\n\t"{prod[0]} : {prod[1]}"\n\t{code}\n\n'
+        for codeline in code.split(';'):
+            if ':' in codeline:
+                splited = codeline.split(':')
+                codeParsed = codeParsed + '\t' + splited[0] + ':' 
+                for i in range(1,len(splited)):
+                    codeParsed = codeParsed + '\n\t\t'+ splited[i] +'\n\t'
+
+            else:
+                codeParsed = codeParsed + '\t' + codeline + '\n'
+
+      
+
+        func = f'def p_{prod[0]}{index}(p):\n\t"{prod[0]} : {prod[1]}"\n{codeParsed}\n\n'
         parser.outPutYacc.write(func)
 
     # functionsYacc
