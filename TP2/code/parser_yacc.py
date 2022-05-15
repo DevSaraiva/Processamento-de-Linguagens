@@ -143,6 +143,7 @@ def p_ignore_empty(p):
 def p_tokens(p):
     "tokens : TOKENS EQUAL SLEFTBRACKET tokenNames SRIGHTBRACKET comment"
     p[0] = (p[4],p[6])
+    parser.tokens = p[4]
 
 def p_tokens_empty(p):
     "tokens : "
@@ -192,6 +193,13 @@ def p_content_characters(p):
 def p_yacc(p):
     "yacc : YACCMARKER precedence vars prods PERCENTAGE functionsyacc inityacc parse"
 
+
+    #tokens error
+
+    for token in parser.tokensUsed:
+        if not token in parser.tokens.split(','):
+            print(f"Token {token} usado sem ser definido")
+    
 
 
     #write imports
@@ -303,11 +311,15 @@ def p_nametokensprec(p):
 def p_nametokensprec_char(p):
     "nametokensprec : nametokensprec COMMA SQM CHAR SQM" 
     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
+    if not p[4] in parser.literals:
+        print(f"Literal {p[4]} Usado Sem ser definido")
 
 
 def p_nametokensprec_char_single(p):
     "nametokensprec : SQM CHAR SQM"
     p[0] = p[1] + p[2] + p[3]
+    if not p[2] in parser.literals:
+        print(f"Literal {p[2]} Usado Sem ser definido")
         
 
 
@@ -367,6 +379,8 @@ def p_prod(p):
 def p_expProd_token(p):
     "expProd : expProd UPPERWORD"
     p[0] = p[1] + ' ' + p[2]
+    parser.tokensUsed.append(p[2])
+    
 
 def p_expProd_terminal(p):
     "expProd : expProd WORD"
@@ -466,6 +480,7 @@ parser.outPutYacc = open(outputDir + "_YACC.py", "w")
 
 
 parser.yaccVars = []
+parser.tokensUsed = []
 
 
 
