@@ -1,12 +1,11 @@
 
 import ply.lex as lex
 
-tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAG","HASHTAGS", "CONTENTVAR","WORD","NEWLINE","DOUBLENEWLINE",
-        "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "PRECTAG", "CHARS","SRIGHTBRACKET", "COMMA", 
-        "SQM", "UPPERWORD","LITERAL","RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION","STRING", 
-        "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR","NAMEVAR", "INITVAR", "NAMEPROD", 
-        "COLON", "LEFTCOTTER", "EXPGRAM", "RETURNEDPRODS", "RIGHTCOTTER", "DEF", "NAMEFUNC", 
-        "PARSEYACC","PERCENTAGE","FUNCTION","BODYFUNCTIONLINE","BODYFUNCTIONFINAL"]
+tokens = ["LEXMARKER","LITERALS", "EQUAL","CHARACTERS","HASHTAG","HASHTAGS", "CONTENTVAR","WORD","NEWLINE",
+        "DOUBLENEWLINE", "IGNORE", "TOKENS", "SLEFTBRACKET", "RIGHT","LEFT", "PRECTAG", "CHARS",
+        "SRIGHTBRACKET", "COMMA", "SQM", "UPPERWORD","RE","LEFTBRACKET", "RIGHTBRACKET", "EXPRESSION",
+        "STRING", "YACCMARKER", "INITYACC", "PRECEDENCE", "CHAR", "LEFTCOTTER", "RIGHTCOTTER"
+        ,"PERCENTAGE","FUNCTION","BODYFUNCTIONLINE","BODYFUNCTIONFINAL"]
 
 
 states = [
@@ -37,8 +36,10 @@ def t_varsReader_NEWLINE(t):
 t_varsReader_ignore = " \t"
 
 def t_varsReader_error(t):
-    r'error'
+    print(f"Illegal character {t} lexer")
+    t.lexer.skip(1)
     return(t)
+
 
 
 #python reader
@@ -57,8 +58,10 @@ def t_pythonReader_RIGHTCOTTER(t):
 t_pythonReader_ignore = " \t\n"
 
 def t_pythonReader_error(t):
-    r'error'
+    print(f"Illegal character {t} lexer")
+    t.lexer.skip(1)
     return(t)
+
 
 #NEWLINE READER
 
@@ -93,8 +96,10 @@ def t_functionReader_BODYFUNCTIONLINE(t):
     return(t)
 
 def t_functionReader_error(t):
-    r'error'
+    print(f"Illegal character {t} lexer")
+    t.lexer.skip(1)
     return(t)
+
 
 
 t_functionReader_ignore = " \t"
@@ -215,8 +220,10 @@ def t_RIGHTCOTTER(t):
 
 
 def t_ERROR(t):
-    r'error'
+    print(f"Illegal character {t} lexer")
+    t.lexer.skip(1)
     return(t)
+
 
 # yacc 
 def t_YACCMARKER(t):
