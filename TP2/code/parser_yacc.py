@@ -290,7 +290,7 @@ def p_yacc(p):
 
 
 def p_precedence(p):
-    "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET"
+    "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET comment"
     p[0] = "precedence" + p[2] + p[3] + p[4] + p[5]
    
 def p_precedence_empty(p):
@@ -348,7 +348,7 @@ def p_varsdesc(p):
 
 
 def p_vars(p):
-    "vars : varsdesc varsaux"
+    "vars : varsdesc varsaux comment"
     p[0] = (p[1],p[2])
 
     
@@ -377,7 +377,7 @@ def p_changeline2(p):
 
 
 def p_prods(p):
-    "prods : prods prod"
+    "prods : prods prod comment"
     p[0] = p[1] + [p[2]]
 
 def p_prods_empty(p):
@@ -441,7 +441,7 @@ def p_markerPrec(p):
 
 
 def p_functionsyacc(p):
-    "functionsyacc : functionsyacc functionyacc"
+    "functionsyacc : functionsyacc functionyacc comment"
     p[0] = p[1] + p[2]
     
 def p_functionsyacc_empty(p):
@@ -461,12 +461,12 @@ def p_bodyfunction_empty(p):
     p[0] = ""
 
 def p_parse(p):
-    "parse : WORD LEFTBRACKET CHARACTERS RIGHTBRACKET"
+    "parse : WORD LEFTBRACKET CHARACTERS RIGHTBRACKET comment"
     p[0] = (p[1], p[2], p[3], p[4])
 
 
 def p_inityacc(p):
-    "inityacc : WORD EQUAL INITYACC"
+    "inityacc : WORD EQUAL INITYACC comment"
     p[0] = p[1]
 
 
