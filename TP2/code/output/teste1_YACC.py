@@ -4,7 +4,7 @@ from teste1_LEXER import tokens
 precedence=[('left','+','-'),('left','*','/'),('right','UMINUS'),]
 
 def p_stat0(p):
-	"stat :  VA '=' exp"
+	"stat :  VAR '=' exp"
 	ya.ts[p[1]] = p[3] 
 
 def p_stat1(p):
