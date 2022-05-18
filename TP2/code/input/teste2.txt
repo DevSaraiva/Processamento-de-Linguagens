@@ -35,7 +35,6 @@ lcontt : SEPARATOR NUM lcontt                    {comp += 1;p[0] = int(p[2]) + p
 lcontt : SEPARATOR PAL lcontt                    {comp += 1;p[0] = 0;if p[2] == "start": soma += p[3]; }
 lcontt :                                        {p[0] = 0}
 
-
 %%
 
 def p_error(p):

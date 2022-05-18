@@ -1,7 +1,5 @@
-import enum
 import os
 import ply.yacc as yacc
-from yaml import parse
 from parser_lex import tokens
 import sys
 import re

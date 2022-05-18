@@ -233,7 +233,7 @@ def t_PRECTAG(t):
 
 
 def t_PERCENTAGE(t):
-    r'%%\n'
+    r'%%'
     # t.lexer.begin('functionsReader')
     return(t)
 
