@@ -1,7 +1,11 @@
 import ply.yacc as yacc
 from teste1_LEXER import tokens
 
-precedence=[('left','+','-'),('left','*','/'),('right','UMINUS'),]
+precedence=[
+	('left','+','-'),
+	('left','*','/'),
+	('right','UMINUS'),
+]
 
 def p_stat0(p):
 	"stat :  VAR '=' exp"

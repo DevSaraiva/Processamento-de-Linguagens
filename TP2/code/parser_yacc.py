@@ -1,4 +1,5 @@
 import os
+from xml.etree.ElementTree import Comment
 import ply.yacc as yacc
 from parser_lex import tokens
 import sys
@@ -121,6 +122,7 @@ def p_comment(p):
 
 def p_comment_empty(p):
     "comment : "
+    p[0] = ""
     
 
 def p_words(p):
@@ -221,8 +223,11 @@ def p_yacc(p):
 
     for var in vars:
         parser.yaccVars.append(var.split(' =')[0])
-        
 
+
+    comment_pos_vars = p[3][2]
+    if comment_pos_vars:
+        parser.outPutYacc.write('#' + '\t' + comment_pos_vars + '\n')
    
 
     prods = p[4]
@@ -232,7 +237,7 @@ def p_yacc(p):
         codeParsed = ""
 
         for var in parser.yaccVars:
-            code = re.sub(var,p[7] + '.' + var,code)
+            code = re.sub(var,p[7][0] + '.' + var,code)
 
         for codeline in code.split(';'):
             if ':' in codeline:
@@ -255,8 +260,13 @@ def p_yacc(p):
     parser.outPutYacc.write(functionsyacc)
 
     #INTYACC
-    inityacc = p[7]
+    inityacc = p[7][0]
+    commentyacc = p[7][1]
     parser.outPutYacc.write('\n' + inityacc + " = yacc.yacc()" + '\n\n')
+    
+    
+    if commentyacc:
+        parser.outPutYacc.write("#" + commentyacc + '\n')
 
 
 
@@ -268,7 +278,7 @@ def p_yacc(p):
     parser.outPutYacc.write("#" + comment + '\n')
     
     for var in vars:
-        parser.outPutYacc.write(p[7] + '.' + var + "\n")
+        parser.outPutYacc.write(p[7][0] + '.' + var + "\n")
 
     parser.outPutYacc.write("\n")
 
@@ -278,7 +288,10 @@ def p_yacc(p):
 
 
     if parse[0].split(".")[0] == inityacc and parse[0].split(".")[1] == "parse" :
-        parser.outPutYacc.write(parse[0] + parse[1] + parse[2] + parse[3])
+        if parse[4]:
+            parser.outPutYacc.write(parse[0] + parse[1] + parse[2] + parse[3] + "\n# " + parse[4])
+        else: 
+            parser.outPutYacc.write(parse[0] + parse[1] + parse[2] + parse[3])
     else:
         print("ERROR! Check your 'parse' function...")
 
@@ -289,7 +302,10 @@ def p_yacc(p):
 
 def p_precedence(p):
     "precedence : PRECEDENCE EQUAL SLEFTBRACKET precedences SRIGHTBRACKET comment"
-    p[0] = "precedence" + p[2] + p[3] + p[4] + p[5]
+    if p[6]:
+        p[0] = "precedence" + p[2] + p[3] + p[4] + "\n" + p[5] + "\n# " + p[6]
+    else:
+        p[0] = "precedence" + p[2] + p[3] + p[4] + "\n" + p[5]
    
 def p_precedence_empty(p):
     "precedence : "
@@ -297,7 +313,7 @@ def p_precedence_empty(p):
 
 def p_precedences_varios(p):
     "precedences : precedences tokenprecedence"
-    p[0] = p[1] + p[2]
+    p[0] = p[1] + "\n\t" + p[2]
 
 def p_precedences_vazio(p):
      "precedences : "
@@ -339,17 +355,13 @@ def p_nametokensprec_upperword_single(p):
     p[0] = p[1] + p[2] + p[3]
 
 
-def p_varsdesc(p):
-    "varsdesc : HASHTAG words NEWLINE"
-    p[0] = p[2]
-    
-
-
 def p_vars(p):
     "vars : varsdesc varsaux comment"
-    p[0] = (p[1],p[2])
+    p[0] = (p[1],p[2],p[3])
 
-    
+def p_varsdesc(p):
+    "varsdesc : HASHTAG words NEWLINE"
+    p[0] = p[2]   
 
 def p_varsaux_empy(p):
     "varsaux : "
@@ -375,7 +387,7 @@ def p_changeline2(p):
 
 
 def p_prods(p):
-    "prods : prods prod comment"
+    "prods : prods prod"
     p[0] = p[1] + [p[2]]
 
 def p_prods_empty(p):
@@ -440,14 +452,17 @@ def p_markerPrec(p):
 
 def p_functionsyacc(p):
     "functionsyacc : functionsyacc functionyacc comment"
-    p[0] = p[1] + p[2]
-    
+    if p[3]:
+        p[0] = p[1] + p[2] + "# " + p[3] + "\n\n"
+    else:
+        p[0] = p[1] + p[2]
+
 def p_functionsyacc_empty(p):
     "functionsyacc : "
     p[0] = ""
 
 def p_functionyacc(p):
-    "functionyacc : FUNCTION BODYFUNCTIONLINE bodyfunction BODYFUNCTIONFINAL " # bodyfunction BODYFUNCTIONFINAL"
+    "functionyacc : FUNCTION BODYFUNCTIONLINE bodyfunction BODYFUNCTIONFINAL " 
     p[0] = p[1] + " " + p[2] + p[3] + "\t" + p[4]
 
 def p_bodyfunction(p):
@@ -460,12 +475,12 @@ def p_bodyfunction_empty(p):
 
 def p_parse(p):
     "parse : WORD LEFTBRACKET CHARACTERS RIGHTBRACKET comment"
-    p[0] = (p[1], p[2], p[3], p[4])
+    p[0] = (p[1], p[2], p[3], p[4],p[5])
 
 
 def p_inityacc(p):
     "inityacc : WORD EQUAL INITYACC comment"
-    p[0] = p[1]
+    p[0] = (p[1],p[4])
 
 
 
